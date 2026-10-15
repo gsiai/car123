@@ -1,0 +1,2114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Car123 - Sell your car | Sistema de Gestión Automotriz</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
+    body { background: #f4f6f9; color: #333; }
+    
+    /* ============ LOGO CAR123 ============ */
+    .logo-car123 { display: flex; align-items: center; gap: 10px; }
+    .logo-car123 .logo-icon {
+        width: 45px; height: 45px; background: linear-gradient(135deg, #e74c3c, #c0392b);
+        border-radius: 10px; display: flex; align-items: center; justify-content: center;
+        color: white; font-weight: 900; font-size: 14px; box-shadow: 0 4px 10px rgba(231,76,60,0.3);
+        position: relative; overflow: hidden;
+    }
+    .logo-car123 .logo-icon::before {
+        content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+        background: linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.2) 50%, transparent 60%);
+        animation: shine 3s infinite;
+    }
+    @keyframes shine { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+    .logo-car123 .logo-text { display: flex; flex-direction: column; line-height: 1; }
+    .logo-car123 .logo-text .brand { font-size: 24px; font-weight: 900; color: #1e3c72; letter-spacing: -1px; }
+    .logo-car123 .logo-text .brand .car { color: #e74c3c; }
+    .logo-car123 .logo-text .slogan { font-size: 10px; color: #6c757d; font-style: italic; letter-spacing: 1px; text-transform: uppercase; }
+    
+    /* ============ LANDING PAGE ============ */
+    .landing-page { display: block; }
+    .landing-page.hidden { display: none; }
+    
+    .landing-nav {
+        position: fixed; top: 0; left: 0; right: 0; background: rgba(255,255,255,0.98);
+        backdrop-filter: blur(10px); z-index: 100; padding: 15px 40px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05); display: flex;
+        justify-content: space-between; align-items: center;
+    }
+    .landing-nav .nav-links { display: flex; gap: 25px; align-items: center; }
+    .landing-nav .nav-links a {
+        color: #343a40; text-decoration: none; font-weight: 600; font-size: 14px;
+        transition: 0.2s; position: relative;
+    }
+    .landing-nav .nav-links a:hover { color: #e74c3c; }
+    .landing-nav .nav-links a::after {
+        content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 2px;
+        background: #e74c3c; transition: 0.3s;
+    }
+    .landing-nav .nav-links a:hover::after { width: 100%; }
+    .btn-admin {
+        background: #1e3c72; color: white; padding: 10px 20px; border-radius: 25px;
+        text-decoration: none; font-weight: 600; font-size: 13px; transition: 0.2s;
+    }
+    .btn-admin:hover { background: #e74c3c; transform: translateY(-2px); }
+    
+    /* HERO */
+    .hero {
+        min-height: 100vh; background: linear-gradient(135deg, rgba(30,60,114,0.9), rgba(42,82,152,0.85)),
+            url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1920') center/cover;
+        display: flex; align-items: center; justify-content: center; color: white;
+        text-align: center; padding: 100px 20px 60px;
+    }
+    .hero-content { max-width: 900px; }
+    .hero h1 { font-size: 64px; font-weight: 900; margin-bottom: 20px; line-height: 1.1; text-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+    .hero h1 .highlight { color: #ffc107; }
+    .hero p { font-size: 20px; margin-bottom: 35px; opacity: 0.95; }
+    .hero-buttons { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
+    .btn-hero {
+        padding: 15px 35px; border-radius: 30px; font-weight: 700; font-size: 15px;
+        text-decoration: none; transition: 0.3s; display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-hero-primary { background: #e74c3c; color: white; }
+    .btn-hero-primary:hover { background: #c0392b; transform: translateY(-3px); box-shadow: 0 10px 25px rgba(231,76,60,0.4); }
+    .btn-hero-secondary { background: transparent; color: white; border: 2px solid white; }
+    .btn-hero-secondary:hover { background: white; color: #1e3c72; }
+    
+    /* SECTIONS */
+    .section { padding: 80px 40px; }
+    .section-title { text-align: center; margin-bottom: 50px; }
+    .section-title h2 { font-size: 42px; color: #1e3c72; margin-bottom: 10px; font-weight: 800; }
+    .section-title .subtitle { color: #e74c3c; font-size: 14px; text-transform: uppercase; letter-spacing: 3px; font-weight: 600; margin-bottom: 10px; }
+    .section-title p { color: #6c757d; font-size: 16px; max-width: 600px; margin: 0 auto; }
+    
+    /* NOSOTROS */
+    .nosotros { background: white; }
+    .nosotros-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto; }
+    .nosotros-card { background: #f8f9fa; padding: 40px 30px; border-radius: 15px; text-align: center; transition: 0.3s; border-top: 4px solid #e74c3c; }
+    .nosotros-card:hover { transform: translateY(-10px); box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
+    .nosotros-card .icon { width: 80px; height: 80px; background: linear-gradient(135deg, #1e3c72, #2a5298); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; color: white; font-size: 32px; }
+    .nosotros-card h3 { color: #1e3c72; margin-bottom: 15px; font-size: 22px; }
+    .nosotros-card p { color: #6c757d; line-height: 1.7; font-size: 14px; }
+    
+    /* ============ TESTIMONIOS (CARRUSEL) ============ */
+    .testimonios { background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); position: relative; overflow: hidden; }
+    .testimonios::before {
+        content: '"'; position: absolute; top: 20px; left: 50px; font-size: 200px;
+        color: rgba(231,76,60,0.08); font-family: Georgia, serif; line-height: 1;
+    }
+    .carousel-container { max-width: 1100px; margin: 0 auto; position: relative; }
+    .carousel-track { display: flex; transition: transform 0.5s ease; }
+    .testimonial-card {
+        min-width: 100%; padding: 40px; background: white; border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08); display: flex; gap: 30px; align-items: center;
+    }
+    .testimonial-avatar {
+        width: 120px; height: 120px; border-radius: 50%; overflow: hidden; flex-shrink: 0;
+        border: 4px solid #e74c3c; box-shadow: 0 5px 15px rgba(231,76,60,0.3);
+    }
+    .testimonial-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .testimonial-content { flex: 1; }
+    .testimonial-stars { color: #ffc107; font-size: 18px; margin-bottom: 15px; }
+    .testimonial-text {
+        font-size: 16px; line-height: 1.8; color: #495057; font-style: italic;
+        margin-bottom: 20px; position: relative; padding-left: 20px;
+    }
+    .testimonial-text::before {
+        content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+        background: linear-gradient(to bottom, #e74c3c, #ffc107); border-radius: 3px;
+    }
+    .testimonial-author h4 { color: #1e3c72; font-size: 18px; margin-bottom: 3px; }
+    .testimonial-author p { color: #6c757d; font-size: 13px; }
+    .testimonial-author .vehicle-tag {
+        display: inline-block; margin-top: 8px; padding: 4px 12px; background: #fff3cd;
+        color: #856404; border-radius: 15px; font-size: 11px; font-weight: 600;
+    }
+    .carousel-controls { display: flex; justify-content: center; gap: 15px; margin-top: 30px; align-items: center; }
+    .carousel-btn {
+        width: 45px; height: 45px; border-radius: 50%; border: none; background: white;
+        color: #1e3c72; cursor: pointer; box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        transition: 0.2s; font-size: 16px;
+    }
+    .carousel-btn:hover { background: #e74c3c; color: white; transform: scale(1.1); }
+    .carousel-dots { display: flex; gap: 8px; }
+    .carousel-dot {
+        width: 10px; height: 10px; border-radius: 50%; background: #ddd; cursor: pointer;
+        transition: 0.3s; border: none;
+    }
+    .carousel-dot.active { background: #e74c3c; width: 30px; border-radius: 5px; }
+    
+    /* SERVICIOS */
+    .servicios { background: #f4f6f9; }
+    .servicios-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; max-width: 1200px; margin: 0 auto; }
+    .servicio-card { background: white; padding: 30px; border-radius: 12px; transition: 0.3s; border-left: 4px solid #e74c3c; }
+    .servicio-card:hover { transform: translateX(5px); box-shadow: 0 10px 25px rgba(0,0,0,0.08); }
+    .servicio-card i { font-size: 36px; color: #e74c3c; margin-bottom: 15px; }
+    .servicio-card h4 { color: #1e3c72; margin-bottom: 10px; font-size: 18px; }
+    .servicio-card p { color: #6c757d; font-size: 13px; line-height: 1.6; }
+    
+    /* ============ TEST DRIVE ============ */
+    .testdrive {
+        background: linear-gradient(135deg, rgba(30,60,114,0.95), rgba(231,76,60,0.9)),
+            url('https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=1920') center/cover fixed;
+        color: white;
+    }
+    .testdrive .section-title h2 { color: white; }
+    .testdrive .section-title p { color: rgba(255,255,255,0.9); }
+    .testdrive-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 40px; max-width: 1100px; margin: 0 auto; }
+    .testdrive-info { display: flex; flex-direction: column; gap: 25px; }
+    .testdrive-feature {
+        display: flex; gap: 15px; align-items: flex-start; background: rgba(255,255,255,0.1);
+        padding: 20px; border-radius: 12px; backdrop-filter: blur(10px);
+    }
+    .testdrive-feature .icon-box {
+        width: 50px; height: 50px; background: #ffc107; border-radius: 10px;
+        display: flex; align-items: center; justify-content: center;
+        color: #1e3c72; font-size: 20px; flex-shrink: 0;
+    }
+    .testdrive-feature h4 { margin-bottom: 5px; font-size: 16px; }
+    .testdrive-feature p { opacity: 0.9; font-size: 13px; }
+    
+    .testdrive-form {
+        background: white; padding: 35px; border-radius: 15px; color: #333;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+    }
+    .testdrive-form h3 { color: #1e3c72; margin-bottom: 5px; font-size: 22px; }
+    .testdrive-form .form-subtitle { color: #6c757d; font-size: 13px; margin-bottom: 20px; }
+    .testdrive-form .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .testdrive-form .form-group { margin-bottom: 15px; }
+    .testdrive-form label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 13px; color: #495057; }
+    .testdrive-form input, .testdrive-form select, .testdrive-form textarea {
+        width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 8px;
+        font-size: 14px; transition: 0.2s; font-family: inherit;
+    }
+    .testdrive-form input:focus, .testdrive-form select:focus, .testdrive-form textarea:focus {
+        outline: none; border-color: #e74c3c; box-shadow: 0 0 0 3px rgba(231,76,60,0.1);
+    }
+    .testdrive-form button {
+        width: 100%; background: linear-gradient(135deg, #e74c3c, #c0392b); color: white;
+        padding: 14px; border: none; border-radius: 8px; font-weight: 700; font-size: 15px;
+        cursor: pointer; transition: 0.2s; margin-top: 10px;
+    }
+    .testdrive-form button:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(231,76,60,0.4); }
+    
+    /* INVENTARIO PREVIEW */
+    .inventario-preview { background: white; }
+    .inventory-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; max-width: 1200px; margin: 0 auto; }
+    .inventory-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08); transition: 0.3s; cursor: pointer; }
+    .inventory-card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,0.15); }
+    .inventory-card .card-img { width: 100%; height: 200px; overflow: hidden; position: relative; }
+    .inventory-card .card-img img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+    .inventory-card:hover .card-img img { transform: scale(1.1); }
+    .inventory-card .card-img .status-badge { position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.95); padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; color: #28a745; }
+    .inventory-card .card-body { padding: 20px; }
+    .inventory-card .card-body h4 { color: #1e3c72; font-size: 18px; margin-bottom: 5px; }
+    .inventory-card .card-body .price { color: #e74c3c; font-size: 24px; font-weight: 800; margin: 10px 0; }
+    .inventory-card .card-body .specs { display: flex; gap: 15px; color: #6c757d; font-size: 12px; margin-top: 10px; padding-top: 10px; border-top: 1px solid #eee; }
+    .inventory-card .card-body .specs span i { color: #e74c3c; margin-right: 4px; }
+    
+    /* ============ MARCAS ALIADAS ============ */
+    .marcas { background: #f8f9fa; padding: 60px 40px; }
+    .marcas-grid {
+        display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 20px; max-width: 1100px; margin: 0 auto;
+    }
+    .marca-item {
+        background: white; padding: 25px 15px; border-radius: 12px; text-align: center;
+        transition: 0.3s; cursor: pointer; border: 2px solid transparent;
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        min-height: 120px;
+    }
+    .marca-item:hover {
+        transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        border-color: #e74c3c;
+    }
+    .marca-item .marca-logo {
+        font-size: 32px; font-weight: 900; margin-bottom: 8px; letter-spacing: -1px;
+    }
+    .marca-item .marca-name { font-size: 11px; color: #6c757d; text-transform: uppercase; letter-spacing: 1px; }
+    .marca-toyota .marca-logo { color: #c0392b; }
+    .marca-ford .marca-logo { color: #003478; }
+    .marca-tesla .marca-logo { color: #1e3c72; }
+    .marca-vw .marca-logo { color: #001e50; }
+    .marca-nissan .marca-logo { color: #c3002f; }
+    .marca-honda .marca-logo { color: #cc0000; }
+    .marca-bmw .marca-logo { color: #0066b1; }
+    .marca-chevrolet .marca-logo { color: #d1ad1c; }
+    
+    /* CONTACTO */
+    .contacto { background: #1e3c72; color: white; }
+    .contacto .section-title h2 { color: white; }
+    .contacto .section-title p { color: rgba(255,255,255,0.8); }
+    .contacto-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; max-width: 1100px; margin: 0 auto; }
+    .contacto-info { display: flex; flex-direction: column; gap: 25px; }
+    .contacto-item { display: flex; gap: 15px; align-items: flex-start; }
+    .contacto-item .icon-box { width: 50px; height: 50px; background: #e74c3c; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px; flex-shrink: 0; }
+    .contacto-item h4 { margin-bottom: 5px; font-size: 16px; }
+    .contacto-item p { opacity: 0.85; font-size: 14px; }
+    .social-icons { display: flex; gap: 12px; margin-top: 20px; }
+    .social-icons a { width: 45px; height: 45px; background: rgba(255,255,255,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 18px; transition: 0.3s; text-decoration: none; }
+    .social-icons a:hover { background: #e74c3c; transform: translateY(-3px); }
+    .contacto-form { background: white; padding: 30px; border-radius: 15px; color: #333; }
+    .contacto-form h3 { color: #1e3c72; margin-bottom: 20px; }
+    .contacto-form .form-group { margin-bottom: 15px; }
+    .contacto-form label { display: block; margin-bottom: 5px; font-weight: 600; font-size: 13px; color: #495057; }
+    .contacto-form input, .contacto-form textarea { width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; transition: 0.2s; }
+    .contacto-form input:focus, .contacto-form textarea:focus { outline: none; border-color: #e74c3c; box-shadow: 0 0 0 3px rgba(231,76,60,0.1); }
+    .contacto-form textarea { resize: vertical; min-height: 100px; }
+    .contacto-form button { width: 100%; background: #e74c3c; color: white; padding: 12px; border: none; border-radius: 8px; font-weight: 700; font-size: 15px; cursor: pointer; transition: 0.2s; }
+    .contacto-form button:hover { background: #c0392b; }
+    
+    /* FOOTER */
+    .footer { background: #0f1e3d; color: white; padding: 30px 40px; text-align: center; }
+    .footer p { opacity: 0.7; font-size: 13px; }
+    .footer .logo-car123 .logo-text .brand { color: white; }
+    
+    /* ============ LOGIN CMS ============ */
+    .login-container { min-height: 100vh; display: none; align-items: center; justify-content: center; background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%); }
+    .login-container.active { display: flex; }
+    .login-box { background: white; padding: 40px; border-radius: 15px; width: 420px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+    .login-box .logo-car123 { justify-content: center; margin-bottom: 20px; }
+    .login-box h2 { text-align: center; color: #1e3c72; margin-bottom: 5px; font-size: 22px; }
+    .login-box .subtitle { text-align: center; color: #666; margin-bottom: 25px; font-size: 13px; }
+    .form-group { margin-bottom: 18px; }
+    .form-group label { display: block; margin-bottom: 6px; font-weight: 600; font-size: 14px; }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px; }
+    .form-group input:focus, .form-group select:focus { outline: none; border-color: #2a5298; }
+    .btn { padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-weight: 600; font-size: 14px; transition: 0.2s; }
+    .btn-primary { background: #2a5298; color: white; width: 100%; }
+    .btn-primary:hover { background: #1e3c72; }
+    .btn-success { background: #28a745; color: white; }
+    .btn-danger { background: #dc3545; color: white; }
+    .btn-warning { background: #ffc107; color: #333; }
+    .btn-info { background: #17a2b8; color: white; }
+    .btn-secondary { background: #6c757d; color: white; }
+    .btn-sm { padding: 5px 10px; font-size: 12px; }
+    .demo-info { background: #fff3cd; padding: 10px; border-radius: 5px; margin-top: 15px; font-size: 12px; text-align: center; }
+    .back-to-home { display: block; text-align: center; margin-top: 15px; color: #2a5298; text-decoration: none; font-size: 13px; }
+    .back-to-home:hover { color: #e74c3c; }
+    
+    /* ============ CMS LAYOUT ============ */
+    .app-container { display: none; min-height: 100vh; }
+    .app-container.active { display: flex; }
+    .sidebar { width: 250px; background: #343a40; color: white; min-height: 100vh; position: fixed; overflow-y: auto; }
+    .sidebar-header { padding: 20px; background: #1e3c72; text-align: center; border-bottom: 3px solid #e74c3c; }
+    .sidebar-header .logo-car123 { justify-content: center; }
+    .sidebar-header .logo-car123 .logo-text .brand { color: white; }
+    .sidebar-header .logo-car123 .logo-text .slogan { color: rgba(255,255,255,0.7); }
+    .sidebar-header p.version { font-size: 11px; opacity: 0.8; margin-top: 8px; }
+    .sidebar-menu { list-style: none; padding: 15px 0; }
+    .sidebar-menu li a { display: block; padding: 12px 20px; color: #ced4da; text-decoration: none; border-left: 3px solid transparent; transition: 0.2s; }
+    .sidebar-menu li a:hover, .sidebar-menu li a.active { background: #495057; color: white; border-left-color: #e74c3c; }
+    .sidebar-menu li a i { width: 25px; }
+    .menu-section { padding: 10px 20px 5px; font-size: 11px; color: #6c757d; text-transform: uppercase; letter-spacing: 1px; }
+    .main-content { margin-left: 250px; flex: 1; }
+    .topbar { background: white; padding: 15px 25px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; }
+    .topbar h1 { font-size: 22px; color: #343a40; }
+    .user-info { display: flex; align-items: center; gap: 15px; }
+    .user-info .avatar { width: 40px; height: 40px; border-radius: 50%; background: #e74c3c; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; }
+    .content-area { padding: 25px; }
+    
+    /* DASHBOARD */
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 25px; }
+    .stat-card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); border-left: 4px solid #2a5298; }
+    .stat-card.green { border-left-color: #28a745; }
+    .stat-card.orange { border-left-color: #fd7e14; }
+    .stat-card.red { border-left-color: #dc3545; }
+    .stat-card.purple { border-left-color: #6f42c1; }
+    .stat-card .label { font-size: 13px; color: #6c757d; text-transform: uppercase; }
+    .stat-card .value { font-size: 28px; font-weight: bold; margin: 8px 0; color: #343a40; }
+    .stat-card .icon { float: right; font-size: 40px; opacity: 0.2; }
+    .charts-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 25px; }
+    .chart-box { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+    .chart-box h3 { margin-bottom: 15px; color: #343a40; font-size: 16px; }
+    .featured-section { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); margin-bottom: 25px; }
+    .featured-section h3 { margin-bottom: 15px; color: #343a40; font-size: 16px; }
+    .featured-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 15px; }
+    .featured-card { border: 1px solid #eee; border-radius: 8px; overflow: hidden; cursor: pointer; transition: 0.2s; background: white; }
+    .featured-card:hover { transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0,0,0,0.1); }
+    .featured-card .img-wrap { width: 100%; height: 140px; background: #f0f0f0; overflow: hidden; position: relative; }
+    .featured-card .img-wrap img { width: 100%; height: 100%; object-fit: cover; }
+    .featured-card .badge-estado { position: absolute; top: 8px; right: 8px; padding: 3px 8px; border-radius: 10px; font-size: 10px; font-weight: 600; background: rgba(255,255,255,0.95); }
+    .featured-card .info { padding: 12px; }
+    .featured-card .info h4 { font-size: 14px; margin-bottom: 5px; color: #343a40; }
+    .featured-card .info .price { color: #e74c3c; font-weight: bold; font-size: 16px; }
+    .featured-card .info .details { font-size: 11px; color: #6c757d; margin-top: 5px; }
+    
+    /* TABLAS */
+    .data-box { background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); overflow: hidden; }
+    .data-box-header { padding: 15px 20px; background: #f8f9fa; border-bottom: 1px solid #dee2e6; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+    .data-box-header h3 { font-size: 16px; color: #343a40; }
+    .view-toggle { display: flex; gap: 5px; }
+    .view-toggle button { padding: 6px 12px; border: 1px solid #ddd; background: white; cursor: pointer; border-radius: 4px; }
+    .view-toggle button.active { background: #e74c3c; color: white; border-color: #e74c3c; }
+    table { width: 100%; border-collapse: collapse; }
+    table th { background: #f8f9fa; padding: 12px; text-align: left; font-size: 13px; color: #495057; border-bottom: 2px solid #dee2e6; }
+    table td { padding: 12px; border-bottom: 1px solid #eee; font-size: 14px; vertical-align: middle; }
+    table tr:hover { background: #f8f9fa; }
+    .badge { padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; display: inline-block; }
+    .badge-success { background: #d4edda; color: #155724; }
+    .badge-warning { background: #fff3cd; color: #856404; }
+    .badge-info { background: #d1ecf1; color: #0c5460; }
+    .badge-danger { background: #f8d7da; color: #721c24; }
+    .badge-secondary { background: #e2e3e5; color: #383d41; }
+    .badge-purple { background: #e7dffc; color: #5a3db8; }
+    .actions-cell { display: flex; gap: 5px; }
+    .vehicle-thumb { width: 80px; height: 55px; border-radius: 4px; object-fit: cover; border: 1px solid #ddd; cursor: pointer; transition: 0.2s; }
+    .vehicle-thumb:hover { transform: scale(1.1); box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+    .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; padding: 20px; }
+    .vehicle-card { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); transition: 0.2s; cursor: pointer; }
+    .vehicle-card:hover { transform: translateY(-4px); box-shadow: 0 8px 20px rgba(0,0,0,0.12); }
+    .vehicle-card .card-img { width: 100%; height: 180px; background: #f0f0f0; position: relative; overflow: hidden; }
+    .vehicle-card .card-img img { width: 100%; height: 100%; object-fit: cover; }
+    .vehicle-card .card-img .overlay-badges { position: absolute; top: 10px; left: 10px; right: 10px; display: flex; justify-content: space-between; }
+    .vehicle-card .card-body { padding: 15px; }
+    .vehicle-card .card-body h4 { font-size: 16px; margin-bottom: 5px; color: #343a40; }
+    .vehicle-card .card-body .vin { font-size: 11px; color: #6c757d; font-family: monospace; margin-bottom: 8px; }
+    .vehicle-card .card-body .price { font-size: 20px; color: #e74c3c; font-weight: bold; margin: 8px 0; }
+    .vehicle-card .card-body .specs { display: flex; gap: 10px; font-size: 12px; color: #6c757d; margin: 8px 0; flex-wrap: wrap; }
+    .vehicle-card .card-body .specs span i { margin-right: 3px; color: #e74c3c; }
+    .vehicle-card .card-footer { padding: 10px 15px; background: #f8f9fa; display: flex; justify-content: space-between; align-items: center; }
+    
+    .image-upload-area { border: 2px dashed #ccc; border-radius: 8px; padding: 20px; text-align: center; cursor: pointer; transition: 0.2s; background: #fafafa; position: relative; }
+    .image-upload-area:hover { border-color: #e74c3c; background: #fff5f5; }
+    .image-upload-area.has-image { border-style: solid; border-color: #28a745; padding: 10px; }
+    .image-upload-area i.upload-icon { font-size: 40px; color: #adb5bd; margin-bottom: 10px; }
+    .image-upload-area p { color: #6c757d; font-size: 13px; margin: 5px 0; }
+    .image-upload-area input[type="file"] { display: none; }
+    .image-preview { max-width: 100%; max-height: 200px; border-radius: 5px; display: block; margin: 0 auto; }
+    .image-preview-actions { margin-top: 10px; display: flex; gap: 10px; justify-content: center; }
+    
+    .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
+    .modal-overlay.active { display: flex; }
+    .modal { background: white; border-radius: 8px; width: 90%; max-width: 600px; max-height: 90vh; overflow-y: auto; }
+    .modal.modal-lg { max-width: 900px; }
+    .modal-header { padding: 15px 20px; background: #1e3c72; color: white; border-radius: 8px 8px 0 0; display: flex; justify-content: space-between; align-items: center; }
+    .modal-body { padding: 20px; }
+    .modal-footer { padding: 15px 20px; border-top: 1px solid #dee2e6; text-align: right; }
+    .close-btn { background: none; border: none; color: white; font-size: 20px; cursor: pointer; }
+    .vehicle-detail { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
+    .vehicle-detail-img { width: 100%; height: 300px; border-radius: 8px; overflow: hidden; background: #f0f0f0; }
+    .vehicle-detail-img img { width: 100%; height: 100%; object-fit: cover; }
+    .vehicle-detail-info h2 { color: #343a40; margin-bottom: 5px; }
+    .vehicle-detail-info .vin-display { font-family: monospace; color: #6c757d; font-size: 13px; margin-bottom: 15px; }
+    .vehicle-detail-info .price-big { font-size: 32px; color: #e74c3c; font-weight: bold; margin: 15px 0; }
+    .specs-list { list-style: none; }
+    .specs-list li { padding: 8px 0; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; font-size: 14px; }
+    .specs-list li strong { color: #495057; }
+    
+    .toast-container { position: fixed; top: 20px; right: 20px; z-index: 2000; }
+    .toast { background: white; padding: 15px 20px; border-radius: 5px; margin-bottom: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border-left: 4px solid #28a745; min-width: 280px; animation: slideIn 0.3s; }
+    .toast.error { border-left-color: #dc3545; }
+    .toast.info { border-left-color: #17a2b8; }
+    @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+    .event-log { background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 5px; font-family: monospace; font-size: 12px; max-height: 300px; overflow-y: auto; }
+    .event-log .event-item { padding: 5px 0; border-bottom: 1px solid #333; }
+    .event-log .timestamp { color: #6a9955; }
+    .event-log .event-type { color: #569cd6; font-weight: bold; }
+    
+    @media (max-width: 768px) {
+        .landing-nav { padding: 15px 20px; flex-direction: column; gap: 10px; }
+        .landing-nav .nav-links { flex-wrap: wrap; justify-content: center; gap: 15px; }
+        .hero h1 { font-size: 36px; }
+        .hero p { font-size: 16px; }
+        .section { padding: 50px 20px; }
+        .section-title h2 { font-size: 28px; }
+        .testimonial-card { flex-direction: column; text-align: center; padding: 25px; }
+        .testimonial-text { padding-left: 0; }
+        .testdrive-grid, .contacto-grid { grid-template-columns: 1fr; }
+        .testdrive-form .form-row { grid-template-columns: 1fr; }
+        .sidebar { width: 60px; }
+        .sidebar-header h3, .sidebar-header p, .sidebar-menu li a span, .menu-section, .sidebar-header .logo-text { display: none; }
+        .sidebar-menu li a { text-align: center; padding: 15px 0; }
+        .sidebar-menu li a i { width: auto; font-size: 18px; }
+        .main-content { margin-left: 60px; }
+        .vehicle-detail { grid-template-columns: 1fr; }
+        .charts-grid { grid-template-columns: 1fr; }
+    }
+</style>
+</head>
+<body>
+
+<!-- ============ LANDING PAGE PÚBLICA ============ -->
+<div id="landingPage" class="landing-page">
+    <nav class="landing-nav">
+        <div class="logo-car123">
+            <div class="logo-icon">C123</div>
+            <div class="logo-text">
+                <span class="brand"><span class="car">Car</span>123</span>
+                <span class="slogan">Sell your car</span>
+            </div>
+        </div>
+        <div class="nav-links">
+            <a href="#inicio">Inicio</a>
+            <a href="#nosotros">Nosotros</a>
+            <a href="#servicios">Servicios</a>
+            <a href="#testdrive">Test Drive</a>
+            <a href="#inventario">Inventario</a>
+            <a href="#contacto">Contacto</a>
+            <a href="#" class="btn-admin" onclick="showLogin(event)"><i class="fas fa-lock"></i> Admin</a>
+        </div>
+    </nav>
+    
+    <!-- HERO -->
+    <section id="inicio" class="hero">
+        <div class="hero-content">
+            <h1>Tu próximo auto <span class="highlight">te está esperando</span></h1>
+            <p>En Car123 hacemos realidad el sueño de conducir. Vehículos nuevos y usados con la mejor financiación del mercado.</p>
+            <div class="hero-buttons">
+                <a href="#inventario" class="btn-hero btn-hero-primary"><i class="fas fa-car"></i> Ver Inventario</a>
+                <a href="#testdrive" class="btn-hero btn-hero-secondary"><i class="fas fa-road"></i> Agenda tu Test Drive</a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- NOSOTROS -->
+    <section id="nosotros" class="section nosotros">
+        <div class="section-title">
+            <div class="subtitle">Conócenos</div>
+            <h2>Nosotros</h2>
+            <p>Más de 15 años llevando felicidad sobre cuatro ruedas</p>
+        </div>
+        <div class="nosotros-grid">
+            <div class="nosotros-card">
+                <div class="icon"><i class="fas fa-cogs"></i></div>
+                <h3>¿Qué Hacemos?</h3>
+                <p>Somos una agencia automotriz integral dedicada a la compra, venta y permuta de vehículos nuevos y usados. Ofrecemos asesoría personalizada, financiamiento a medida y un servicio de postventa de primera calidad.</p>
+            </div>
+            <div class="nosotros-card">
+                <div class="icon"><i class="fas fa-bullseye"></i></div>
+                <h3>Misión</h3>
+                <p>Brindar a nuestros clientes la mejor experiencia en la adquisición de su vehículo, ofreciendo transparencia, calidad y confianza en cada transacción. Nos comprometemos a superar expectativas.</p>
+            </div>
+            <div class="nosotros-card">
+                <div class="icon"><i class="fas fa-eye"></i></div>
+                <h3>Visión</h3>
+                <p>Ser la red de agencias automotrices líder e innovadora del país para el 2030, reconocida por nuestra excelencia en servicio, tecnología de vanguardia y compromiso con la movilidad sostenible.</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- ============ TESTIMONIOS (CARRUSEL) ============ -->
+    <section id="testimonios" class="section testimonios">
+        <div class="section-title">
+            <div class="subtitle">Lo que dicen de nosotros</div>
+            <h2>Testimonios de Clientes</h2>
+            <p>Historias reales de personas que confiaron en Car123</p>
+        </div>
+        <div class="carousel-container">
+            <div class="carousel-track" id="carouselTrack"></div>
+            <div class="carousel-controls">
+                <button class="carousel-btn" onclick="prevTestimonial()"><i class="fas fa-chevron-left"></i></button>
+                <div class="carousel-dots" id="carouselDots"></div>
+                <button class="carousel-btn" onclick="nextTestimonial()"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+    </section>
+    
+    <!-- SERVICIOS -->
+    <section id="servicios" class="section servicios">
+        <div class="section-title">
+            <div class="subtitle">Lo que ofrecemos</div>
+            <h2>Nuestros Servicios</h2>
+            <p>Soluciones completas para todas tus necesidades automotrices</p>
+        </div>
+        <div class="servicios-grid">
+            <div class="servicio-card"><i class="fas fa-car-side"></i><h4>Venta de Vehículos Nuevos</h4><p>Amplio catálogo de las mejores marcas con garantía de fábrica.</p></div>
+            <div class="servicio-card"><i class="fas fa-car"></i><h4>Vehículos Usados Certificados</h4><p>Seleccionamos los mejores vehículos con inspección de 100 puntos.</p></div>
+            <div class="servicio-card"><i class="fas fa-handshake"></i><h4>Permuta y Trade-in</h4><p>Recibimos tu vehículo actual como parte de pago. Avalúo justo.</p></div>
+            <div class="servicio-card"><i class="fas fa-money-bill-wave"></i><h4>Financiamiento</h4><p>Planes de crédito flexibles con las mejores tasas del mercado.</p></div>
+            <div class="servicio-card"><i class="fas fa-shield-alt"></i><h4>Seguros Automotrices</h4><p>Alianzas con las principales aseguradoras al mejor precio.</p></div>
+            <div class="servicio-card"><i class="fas fa-wrench"></i><h4>Postventa y Taller</h4><p>Servicio técnico especializado con repuestos originales.</p></div>
+            <div class="servicio-card"><i class="fas fa-file-contract"></i><h4>Trámites Legales</h4><p>Gestionamos todos los trámites de titularidad y registro.</p></div>
+            <div class="servicio-card"><i class="fas fa-road"></i><h4>Test Drive</h4><p>Prueba el vehículo de tus sueños antes de comprarlo. ¡Agenda online!</p></div>
+        </div>
+    </section>
+    
+    <!-- ============ TEST DRIVE ============ -->
+    <section id="testdrive" class="section testdrive">
+        <div class="section-title">
+            <div class="subtitle" style="color:#ffc107;">Vívelo antes de comprarlo</div>
+            <h2>Agenda tu Test Drive</h2>
+            <p>Reserva una cita y prueba el vehículo de tus sueños sin compromiso</p>
+        </div>
+        <div class="testdrive-grid">
+            <div class="testdrive-info">
+                <div class="testdrive-feature">
+                    <div class="icon-box"><i class="fas fa-calendar-check"></i></div>
+                    <div>
+                        <h4>Reserva Fácil y Rápida</h4>
+                        <p>Selecciona el vehículo, fecha y hora que mejor se adapte a tu agenda en solo 3 pasos.</p>
+                    </div>
+                </div>
+                <div class="testdrive-feature">
+                    <div class="icon-box"><i class="fas fa-user-tie"></i></div>
+                    <div>
+                        <h4>Asesoría Personalizada</h4>
+                        <p>Un especialista te acompañará durante toda la prueba resolviendo tus dudas.</p>
+                    </div>
+                </div>
+                <div class="testdrive-feature">
+                    <div class="icon-box"><i class="fas fa-route"></i></div>
+                    <div>
+                        <h4>Rutas Predefinidas</h4>
+                        <p>Diseñamos rutas que te permiten experimentar el vehículo en distintas condiciones.</p>
+                    </div>
+                </div>
+                <div class="testdrive-feature">
+                    <div class="icon-box"><i class="fas fa-gift"></i></div>
+                    <div>
+                        <h4>Sin Compromiso</h4>
+                        <p>Prueba todos los modelos que desees. Si te decides, obtienes beneficios exclusivos.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="testdrive-form">
+                <h3><i class="fas fa-calendar-alt"></i> Reserva tu cita</h3>
+                <p class="form-subtitle">Completa el formulario y te confirmaremos en menos de 2 horas</p>
+                <form onsubmit="agendarTestDrive(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Nombre completo *</label>
+                            <input type="text" id="td_nombre" required placeholder="Juan Pérez">
+                        </div>
+                        <div class="form-group">
+                            <label>Teléfono *</label>
+                            <input type="tel" id="td_telefono" required placeholder="+58 414-1234567">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Email *</label>
+                        <input type="email" id="td_email" required placeholder="tu@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Vehículo de interés *</label>
+                        <select id="td_vehiculo" required></select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Fecha preferida *</label>
+                            <input type="date" id="td_fecha" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Hora preferida *</label>
+                            <select id="td_hora" required>
+                                <option value="">Selecciona...</option>
+                                <option>09:00 AM</option>
+                                <option>10:00 AM</option>
+                                <option>11:00 AM</option>
+                                <option>12:00 PM</option>
+                                <option>02:00 PM</option>
+                                <option>03:00 PM</option>
+                                <option>04:00 PM</option>
+                                <option>05:00 PM</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Comentarios (opcional)</label>
+                        <textarea id="td_comentarios" rows="2" placeholder="¿Algo que debamos saber?"></textarea>
+                    </div>
+                    <button type="submit"><i class="fas fa-calendar-check"></i> Confirmar Reserva</button>
+                </form>
+            </div>
+        </div>
+    </section>
+    
+    <!-- INVENTARIO PREVIEW -->
+    <section id="inventario" class="section inventario-preview">
+        <div class="section-title">
+            <div class="subtitle">Explora</div>
+            <h2>Vehículos Destacados</h2>
+            <p>Una selección de nuestros mejores autos disponibles</p>
+        </div>
+        <div class="inventory-grid" id="inventoryGrid"></div>
+        <div style="text-align:center; margin-top:40px;">
+            <a href="#" class="btn-hero btn-hero-primary" onclick="showLogin(event)" style="background:#1e3c72;">
+                <i class="fas fa-lock"></i> Ver Inventario Completo (Admin)
+            </a>
+        </div>
+    </section>
+    
+    <!-- ============ MARCAS ALIADAS ============ -->
+    <section class="marcas">
+        <div class="section-title">
+            <div class="subtitle">Distribuidores oficiales</div>
+            <h2>Marcas Aliadas</h2>
+            <p>Trabajamos con las mejores marcas del mercado automotriz</p>
+        </div>
+        <div class="marcas-grid">
+            <div class="marca-item marca-toyota"><div class="marca-logo">TOYOTA</div><div class="marca-name">Japón</div></div>
+            <div class="marca-item marca-ford"><div class="marca-logo">FORD</div><div class="marca-name">EE.UU.</div></div>
+            <div class="marca-item marca-tesla"><div class="marca-logo">TESLA</div><div class="marca-name">EE.UU.</div></div>
+            <div class="marca-item marca-vw"><div class="marca-logo">VW</div><div class="marca-name">Alemania</div></div>
+            <div class="marca-item marca-nissan"><div class="marca-logo">NISSAN</div><div class="marca-name">Japón</div></div>
+            <div class="marca-item marca-honda"><div class="marca-logo">HONDA</div><div class="marca-name">Japón</div></div>
+            <div class="marca-item marca-bmw"><div class="marca-logo">BMW</div><div class="marca-name">Alemania</div></div>
+            <div class="marca-item marca-chevrolet"><div class="marca-logo">CHEVY</div><div class="marca-name">EE.UU.</div></div>
+        </div>
+    </section>
+    
+    <!-- CONTACTO -->
+    <section id="contacto" class="section contacto">
+        <div class="section-title">
+            <div class="subtitle" style="color:#ffc107;">Hablemos</div>
+            <h2>Contáctanos</h2>
+            <p>Estamos aquí para ayudarte a encontrar tu vehículo ideal</p>
+        </div>
+        <div class="contacto-grid">
+            <div class="contacto-info">
+                <div class="contacto-item">
+                    <div class="icon-box"><i class="fas fa-map-marker-alt"></i></div>
+                    <div><h4>Ubicación</h4><p>Av. Principal del Automotor #123<br>Caracas, Venezuela</p></div>
+                </div>
+                <div class="contacto-item">
+                    <div class="icon-box"><i class="fas fa-phone"></i></div>
+                    <div><h4>Teléfono</h4><p>+58 212-1234567<br>+58 414-1234567 (WhatsApp)</p></div>
+                </div>
+                <div class="contacto-item">
+                    <div class="icon-box"><i class="fas fa-envelope"></i></div>
+                    <div><h4>Email</h4><p>ventas@car123.com<br>info@car123.com</p></div>
+                </div>
+                <div class="contacto-item">
+                    <div class="icon-box"><i class="fas fa-clock"></i></div>
+                    <div><h4>Horario</h4><p>Lun - Vie: 8:00 AM - 6:00 PM<br>Sáb: 9:00 AM - 2:00 PM</p></div>
+                </div>
+                <div>
+                    <h4 style="margin-bottom:10px;">Síguenos en redes</h4>
+                    <div class="social-icons">
+                        <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                        <a href="#" title="YouTube"><i class="fab fa-youtube"></i></a>
+                        <a href="#" title="TikTok"><i class="fab fa-tiktok"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="contacto-form">
+                <h3><i class="fas fa-paper-plane"></i> Envíanos un mensaje</h3>
+                <form onsubmit="enviarContacto(event)">
+                    <div class="form-group"><label>Nombre completo</label><input type="text" id="ct_nombre" required></div>
+                    <div class="form-group"><label>Email</label><input type="email" id="ct_email" required></div>
+                    <div class="form-group"><label>Teléfono</label><input type="tel" id="ct_telefono"></div>
+                    <div class="form-group"><label>Asunto</label><input type="text" id="ct_asunto" required></div>
+                    <div class="form-group"><label>Mensaje</label><textarea id="ct_mensaje" required></textarea></div>
+                    <button type="submit"><i class="fas fa-paper-plane"></i> Enviar Mensaje</button>
+                </form>
+            </div>
+        </div>
+    </section>
+    
+    <footer class="footer">
+        <div class="logo-car123" style="justify-content:center; margin-bottom:15px;">
+            <div class="logo-icon">C123</div>
+            <div class="logo-text">
+                <span class="brand"><span class="car" style="color:#e74c3c;">Car</span>123</span>
+                <span class="slogan" style="color:rgba(255,255,255,0.6);">Sell your car</span>
+            </div>
+        </div>
+        <p>&copy; 2026 Car123 - Todos los derechos reservados | Sistema de Gestión Automotriz v1.3</p>
+    </footer>
+</div>
+
+<!-- ============ LOGIN CMS ============ -->
+<div id="loginScreen" class="login-container">
+    <div class="login-box">
+        <div class="logo-car123">
+            <div class="logo-icon">C123</div>
+            <div class="logo-text">
+                <span class="brand"><span class="car">Car</span>123</span>
+                <span class="slogan">Sell your car</span>
+            </div>
+        </div>
+        <h2>Panel Administrativo</h2>
+        <p class="subtitle">Sistema de Gestión Automotriz</p>
+        <form id="loginForm">
+            <div class="form-group"><label>Usuario</label><input type="text" id="loginUser" value="admin" required></div>
+            <div class="form-group"><label>Contraseña</label><input type="password" id="loginPass" value="admin123" required></div>
+            <button type="submit" class="btn btn-primary"><i class="fas fa-sign-in-alt"></i> Iniciar Sesión</button>
+        </form>
+        <div class="demo-info"><strong>Demo:</strong> admin / admin123</div>
+        <a href="#" class="back-to-home" onclick="showLanding(event)"><i class="fas fa-arrow-left"></i> Volver al sitio público</a>
+    </div>
+</div>
+
+<!-- ============ APP CMS ============ -->
+<div id="appContainer" class="app-container">
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-car123">
+                <div class="logo-icon">C123</div>
+                <div class="logo-text">
+                    <span class="brand"><span class="car" style="color:#e74c3c;">Car</span>123</span>
+                    <span class="slogan">Sell your car</span>
+                </div>
+            </div>
+            <p class="version">CMS v1.3</p>
+        </div>
+        <ul class="sidebar-menu">
+            <li class="menu-section">Principal</li>
+            <li><a href="#" data-module="dashboard" class="active"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+            <li class="menu-section">Operaciones</li>
+            <li><a href="#" data-module="vehiculos"><i class="fas fa-car"></i> Vehículos</a></li>
+            <li><a href="#" data-module="clientes"><i class="fas fa-users"></i> Clientes</a></li>
+            <li><a href="#" data-module="citas"><i class="fas fa-calendar-check"></i> Citas Test Drive</a></li>
+            <li><a href="#" data-module="ventas"><i class="fas fa-handshake"></i> Ventas</a></li>
+            <li><a href="#" data-module="mantenimientos"><i class="fas fa-wrench"></i> Postventa</a></li>
+            <li><a href="#" data-module="ofertas"><i class="fas fa-tags"></i> Ofertas</a></li>
+            <li class="menu-section">Sistema</li>
+            <li><a href="#" data-module="usuarios"><i class="fas fa-user-shield"></i> Usuarios</a></li>
+            <li><a href="#" data-module="auditoria"><i class="fas fa-clipboard-list"></i> Auditoría</a></li>
+            <li><a href="#" data-module="eventos"><i class="fas fa-bolt"></i> Motor Eventos</a></li>
+            <li><a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a></li>
+        </ul>
+    </aside>
+    <main class="main-content">
+        <div class="topbar">
+            <h1 id="pageTitle">Dashboard</h1>
+            <div class="user-info">
+                <span id="userName">Admin</span>
+                <div class="avatar">A</div>
+            </div>
+        </div>
+        <div class="content-area" id="contentArea"></div>
+    </main>
+</div>
+
+<!-- MODAL -->
+<div id="modal" class="modal-overlay">
+    <div class="modal" id="modalBox">
+        <div class="modal-header">
+            <h3 id="modalTitle">Título</h3>
+            <button class="close-btn" onclick="closeModal()">&times;</button>
+        </div>
+        <div class="modal-body" id="modalBody"></div>
+        <div class="modal-footer" id="modalFooter"></div>
+    </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast-container" id="toastContainer"></div>
+
+<script>
+// ============ IMÁGENES REALES POR MARCA/MODELO ============
+const VEHICLE_IMAGES = {
+    'Toyota RAV4': 'https://images.unsplash.com/photo-1568844293986-8d0400bd4745?w=800&q=80',
+    'Toyota Corolla': 'https://images.unsplash.com/photo-1590362891991-f776e747a588?w=800&q=80',
+    'Tesla Model 3': 'https://images.unsplash.com/photo-1560958089-b8a1929cea89?w=800&q=80',
+    'Ford F-150': 'https://images.unsplash.com/photo-1595953854408-c9d926a41de2?w=800&q=80',
+    'Volkswagen Tiguan': 'https://images.unsplash.com/photo-1606611013016-969c19ba27bb?w=800&q=80',
+    'Nissan Frontier': 'https://images.unsplash.com/photo-1559416523-14ec829b75a2?w=800&q=80',
+    'default': 'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=800&q=80'
+};
+function getVehicleImage(marca, modelo) {
+    return VEHICLE_IMAGES[`${marca} ${modelo}`] || VEHICLE_IMAGES['default'];
+}
+
+// ============ TESTIMONIOS DATA ============
+const TESTIMONIOS = [
+    { nombre: 'María González', avatar: 'https://i.pravatar.cc/150?img=47', estrellas: 5, texto: 'Increíble experiencia en Car123. Me ayudaron a encontrar el auto perfecto para mi familia y el proceso de financiamiento fue súper rápido. ¡100% recomendados!', vehiculo: 'Toyota RAV4 2026', fecha: 'Octubre 2026' },
+    { nombre: 'José Ramírez', avatar: 'https://i.pravatar.cc/150?img=12', estrellas: 5, texto: 'Compré mi Ford F-150 y estoy encantado. El equipo de ventas fue muy profesional y transparente. El test drive me convenció de que era el vehículo adecuado para mí.', vehiculo: 'Ford F-150 2024', fecha: 'Septiembre 2026' },
+    { nombre: 'Carolina Méndez', avatar: 'https://i.pravatar.cc/150?img=45', estrellas: 5, texto: 'El servicio de postventa es excepcional. Cada vez que llevo mi Tesla a mantenimiento, me tratan como en casa. Además, la app para agendar citas es muy práctica.', vehiculo: 'Tesla Model 3 2026', fecha: 'Octubre 2026' },
+    { nombre: 'Luis Hernández', avatar: 'https://i.pravatar.cc/150?img=33', estrellas: 4, texto: 'Hice una permuta y el avalúo de mi auto anterior fue muy justo. Me dieron un excelente precio por mi Volkswagen Tiguan nuevo. Proceso rápido y sin complicaciones.', vehiculo: 'Volkswagen Tiguan 2025', fecha: 'Agosto 2026' },
+    { nombre: 'Ana Martínez', avatar: 'https://i.pravatar.cc/150?img=44', estrellas: 5, texto: 'Mi primer auto y no pude haber elegido mejor agencia. Me explicaron todo con paciencia, desde las opciones de financiamiento hasta los trámites legales. ¡Gracias Car123!', vehiculo: 'Toyota Corolla 2025', fecha: 'Septiembre 2026' },
+    { nombre: 'Pedro Rodríguez', avatar: 'https://i.pravatar.cc/150?img=68', estrellas: 5, texto: 'La mejor decisión que tomé fue agendar el test drive. Pude probar 3 vehículos diferentes y al final me decidí por la Nissan Frontier. Excelente atención personalizada.', vehiculo: 'Nissan Frontier 2023', fecha: 'Octubre 2026' }
+];
+
+// ============ BASE DE DATOS LOCAL ============
+const DB = {
+    get(key) { return JSON.parse(localStorage.getItem(key) || '[]'); },
+    set(key, data) { localStorage.setItem(key, JSON.stringify(data)); },
+    nextId(key) { const data = this.get(key); return data.length ? Math.max(...data.map(x => x.id)) + 1 : 1; }
+};
+
+function compressImage(file, maxWidth = 800, quality = 0.7) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const img = new Image();
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                let width = img.width, height = img.height;
+                if (width > maxWidth) { height = (height * maxWidth) / width; width = maxWidth; }
+                canvas.width = width; canvas.height = height;
+                canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+                resolve(canvas.toDataURL('image/jpeg', quality));
+            };
+            img.onerror = reject;
+            img.src = e.target.result;
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+    });
+}
+
+// ============ SEED DATA ============
+function seedData() {
+    if (localStorage.getItem('seeded_v4')) return;
+    
+    DB.set('usuarios', [
+        { id: 1, nombre: 'Administrador', username: 'admin', email: 'admin@car123.com', password: 'admin123', rol: 'Administrador', departamento: 'Sistemas', fecha_registro: '2026-01-15', codigo: 'U001' },
+        { id: 2, nombre: 'Carlos Mendoza', username: 'cmendoza', email: 'carlos@car123.com', password: '123456', rol: 'Gerente', departamento: 'Ventas', fecha_registro: '2026-02-10', codigo: 'U002' },
+        { id: 3, nombre: 'Ana Rodríguez', username: 'arodriguez', email: 'ana@car123.com', password: '123456', rol: 'Vendedor', departamento: 'Ventas', fecha_registro: '2026-03-05', codigo: 'U003' },
+        { id: 4, nombre: 'Luis Pérez', username: 'lperez', email: 'luis@car123.com', password: '123456', rol: 'Mecánico', departamento: 'Postventa', fecha_registro: '2026-03-20', codigo: 'U004' }
+    ]);
+    
+    const vehiculosSeed = [
+        { vin: '1HGBH41JXMN109186', marca: 'Toyota', modelo: 'RAV4', anio: 2026, color: 'Blanco Perla', tipo: 'SUV', estado: 'Disponible', precio: 38500, kilometraje: 0, agencia: 'Sede Principal', asegurado: true, destacado: true },
+        { vin: '2T1BURHE0JC012345', marca: 'Toyota', modelo: 'Corolla', anio: 2025, color: 'Plata', tipo: 'Sedan', estado: 'Vendido', precio: 24500, kilometraje: 1250, agencia: 'Sede Principal', asegurado: true, destacado: false },
+        { vin: '5YJSA1E26MF123456', marca: 'Tesla', modelo: 'Model 3', anio: 2026, color: 'Negro', tipo: 'Sedan', estado: 'Disponible', precio: 45000, kilometraje: 0, agencia: 'Sede Norte', asegurado: false, destacado: true },
+        { vin: '1FTFW1ET5DFC12345', marca: 'Ford', modelo: 'F-150', anio: 2024, color: 'Rojo', tipo: 'Camión', estado: 'Disponible', precio: 52000, kilometraje: 15000, agencia: 'Sede Principal', asegurado: true, destacado: true },
+        { vin: 'WVWZZZ3CZWE123456', marca: 'Volkswagen', modelo: 'Tiguan', anio: 2025, color: 'Azul', tipo: 'SUV', estado: 'Reservado', precio: 35000, kilometraje: 500, agencia: 'Sede Norte', asegurado: false, destacado: false },
+        { vin: 'JN8AS5MT9CW123456', marca: 'Nissan', modelo: 'Frontier', anio: 2023, color: 'Gris', tipo: 'Camión', estado: 'Usado', precio: 28000, kilometraje: 45000, agencia: 'Sede Principal', asegurado: true, destacado: true }
+    ];
+    
+    const vehiculos = vehiculosSeed.map((v, i) => ({
+        id: i + 1, ...v,
+        impuestos: v.precio * 0.16,
+        fecha_ingreso: '2026-0' + (8 + (i % 3)) + '-' + String(1 + i).padStart(2, '0'),
+        imagen: getVehicleImage(v.marca, v.modelo)
+    }));
+    DB.set('vehiculos', vehiculos);
+    
+    DB.set('clientes', [
+        { id: 1, nombre: 'María González', documento: 'V-12345678', email: 'maria@email.com', telefono: '+58 414-1234567', direccion: 'Av. Principal 123', fecha_registro: '2026-08-15', vendedor: 'Ana Rodríguez' },
+        { id: 2, nombre: 'José Ramírez', documento: 'V-87654321', email: 'jose.r@email.com', telefono: '+58 412-7654321', direccion: 'Calle 5 #45', fecha_registro: '2026-09-01', vendedor: 'Ana Rodríguez' },
+        { id: 3, nombre: 'Pedro Martínez', documento: 'V-11223344', email: 'pedro@email.com', telefono: '+58 424-1122334', direccion: 'Urb. Los Prados', fecha_registro: '2026-09-20', vendedor: 'Carlos Mendoza' }
+    ]);
+    
+    DB.set('ventas', [
+        { id: 1, codigo: 'VTA-2026-0001', cliente_id: 2, vehiculo_id: 2, vendedor: 'Ana Rodríguez', tipo: 'Venta', modalidad: 'Financiado', subtotal: 24500, impuestos: 3920, descuento: 0, total: 28420, estado: 'Entregada', fecha: '2026-09-25' },
+        { id: 2, codigo: 'VTA-2026-0002', cliente_id: 1, vehiculo_id: 3, vendedor: 'Ana Rodríguez', tipo: 'Venta', modalidad: 'Contado', subtotal: 45000, impuestos: 7200, descuento: 2000, total: 50200, estado: 'En Legal', fecha: '2026-10-10' },
+        { id: 3, codigo: 'VTA-2026-0003', cliente_id: 3, vehiculo_id: 5, vendedor: 'Carlos Mendoza', tipo: 'Permuta', modalidad: 'Mixto', subtotal: 35000, impuestos: 5600, descuento: 1500, total: 39100, estado: 'Aprobada', fecha: '2026-10-12' }
+    ]);
+    
+    DB.set('mantenimientos', [
+        { id: 1, vehiculo_id: 2, cliente_id: 2, kilometraje: 1000, tipo: 'Preventivo', descripcion: 'Cambio de aceite y filtros', costo: 120, realizado: true, fecha_programada: '2026-10-01', fecha_realizacion: '2026-10-02' },
+        { id: 2, vehiculo_id: 2, cliente_id: 2, kilometraje: 1250, tipo: 'Revision', descripcion: 'Inspección general', costo: 0, realizado: true, fecha_programada: '2026-10-10', fecha_realizacion: '2026-10-10' },
+        { id: 3, vehiculo_id: 4, cliente_id: 3, kilometraje: 15000, tipo: 'Preventivo', descripcion: 'Mantenimiento 15k km', costo: 250, realizado: false, fecha_programada: '2026-10-20' }
+    ]);
+    
+    DB.set('ofertas', [
+        { id: 1, nombre: 'Descuento SUV Octubre', descripcion: '20% descuento en SUV seleccionadas', tipo: 'Descuento', valor: 20, fecha_inicio: '2026-10-01', fecha_fin: '2026-10-31', activa: true },
+        { id: 2, nombre: 'Seguro Gratis', descripcion: '1 año de seguro gratis en compras al contado', tipo: 'Bonus', valor: 100, fecha_inicio: '2026-10-01', fecha_fin: '2026-12-31', activa: true },
+        { id: 3, nombre: 'Accesorios de Regalo', descripcion: 'Kit de accesorios valorado en $500', tipo: 'Accesorio', valor: 500, fecha_inicio: '2026-10-01', fecha_fin: '2026-11-30', activa: true }
+    ]);
+    
+    // CITAS TEST DRIVE
+    DB.set('citas', [
+        { id: 1, codigo: 'TD-2026-0001', nombre: 'Roberto Silva', email: 'roberto@email.com', telefono: '+58 414-5551234', vehiculo_id: 1, fecha: '2026-10-16', hora: '10:00 AM', comentarios: 'Interesado en la versión híbrida', estado: 'Confirmada', fecha_creacion: '2026-10-13T10:30:00', asesor: 'Ana Rodríguez' },
+        { id: 2, codigo: 'TD-2026-0002', nombre: 'Laura Jiménez', email: 'laura.j@email.com', telefono: '+58 424-5559876', vehiculo_id: 3, fecha: '2026-10-17', hora: '03:00 PM', comentarios: 'Quiere probar la autonomía', estado: 'Pendiente', fecha_creacion: '2026-10-14T09:15:00', asesor: '' },
+        { id: 3, codigo: 'TD-2026-0003', nombre: 'Miguel Torres', email: 'miguel.t@email.com', telefono: '+58 412-5557788', vehiculo_id: 4, fecha: '2026-10-15', hora: '11:00 AM', comentarios: '', estado: 'Realizada', fecha_creacion: '2026-10-10T14:20:00', asesor: 'Carlos Mendoza' },
+        { id: 4, codigo: 'TD-2026-0004', nombre: 'Sofía Vargas', email: 'sofia@email.com', telefono: '+58 414-5553344', vehiculo_id: 5, fecha: '2026-10-18', hora: '02:00 PM', comentarios: 'Viene con su esposo', estado: 'Confirmada', fecha_creacion: '2026-10-14T16:45:00', asesor: 'Ana Rodríguez' }
+    ]);
+    
+    DB.set('auditoria', []);
+    DB.set('eventos', []);
+    localStorage.setItem('seeded_v4', 'true');
+}
+
+// ============ AUDITORÍA ============
+function logAction(modulo, accion, datos = {}) {
+    const logs = DB.get('auditoria');
+    logs.push({ id: logs.length + 1, usuario: currentUser?.username || 'sistema', fecha_hora: new Date().toISOString(), modulo, accion, ip: '192.168.1.' + Math.floor(Math.random() * 255), datos });
+    DB.set('auditoria', logs);
+}
+
+// ============ MOTOR DE EVENTOS ============
+function triggerEvent(tipo, payload) {
+    const eventos = DB.get('eventos');
+    const handlers = getHandlersForEvent(tipo);
+    eventos.push({ id: eventos.length + 1, tipo, payload, timestamp: new Date().toISOString(), estado: 'Procesado', handlers: handlers.map(h => ({ nombre: h, resultado: 'OK', tiempo: Math.floor(Math.random() * 200) + 'ms' })) });
+    DB.set('eventos', eventos);
+    showToast(`Evento: ${tipo}`, 'info');
+}
+function getHandlersForEvent(tipo) {
+    const map = {
+        'Venta.Creada': ['Validar Stock', 'Notificar Gerente', 'Reservar Vehículo'],
+        'Venta.Aprobada': ['Generar Contrato', 'Solicitar Crédito', 'Emitir Factura'],
+        'Venta.Entregada': ['Emitir Póliza Seguro', 'Programar Mantenimiento', 'Enviar Email Cliente', 'Actualizar Contabilidad'],
+        'Mantenimiento.Programado': ['Notificar Cliente', 'Asignar Mecánico', 'Reservar Repuestos'],
+        'Vehiculo.Ingresado': ['Decodificar VIN', 'Procesar Fotografía', 'Publicar en Web'],
+        'Cita.Agendada': ['Notificar Asesor', 'Reservar Vehículo', 'Enviar Email Confirmación', 'Crear Recordatorio'],
+        'Cita.Confirmada': ['Notificar Cliente', 'Preparar Vehículo', 'Asignar Asesor'],
+        'Cita.Realizada': ['Enviar Encuesta Satisfacción', 'Crear Lead Seguimiento', 'Notificar Ventas'],
+        'Cita.Cancelada': ['Liberar Vehículo', 'Notificar Asesor', 'Enviar Email Cancelación']
+    };
+    return map[tipo] || ['Log General'];
+}
+
+// ============ NAVEGACIÓN LANDING / LOGIN / CMS ============
+function showLanding(e) {
+    if (e) e.preventDefault();
+    document.getElementById('landingPage').classList.remove('hidden');
+    document.getElementById('loginScreen').classList.remove('active');
+    document.getElementById('appContainer').classList.remove('active');
+    window.scrollTo(0, 0);
+}
+function showLogin(e) {
+    if (e) e.preventDefault();
+    document.getElementById('landingPage').classList.add('hidden');
+    document.getElementById('loginScreen').classList.add('active');
+    document.getElementById('appContainer').classList.remove('active');
+    window.scrollTo(0, 0);
+}
+function showCMS() {
+    document.getElementById('landingPage').classList.add('hidden');
+    document.getElementById('loginScreen').classList.remove('active');
+    document.getElementById('appContainer').classList.add('active');
+}
+
+let currentUser = null;
+document.getElementById('loginForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const username = document.getElementById('loginUser').value;
+    const password = document.getElementById('loginPass').value;
+    const user = DB.get('usuarios').find(u => u.username === username && u.password === password);
+    if (user) {
+        currentUser = user;
+        document.getElementById('userName').textContent = user.nombre;
+        logAction('Autenticación', 'LOGIN', { usuario: user.username });
+        showCMS();
+        loadModule('dashboard');
+    } else {
+        showToast('Credenciales incorrectas', 'error');
+    }
+});
+document.getElementById('logoutBtn').addEventListener('click', (e) => {
+    e.preventDefault();
+    logAction('Autenticación', 'LOGOUT', { usuario: currentUser.username });
+    currentUser = null;
+    showLanding();
+});
+
+// ============ CARRUSEL TESTIMONIOS ============
+let currentTestimonial = 0;
+let carouselInterval;
+
+function renderCarousel() {
+    const track = document.getElementById('carouselTrack');
+    const dots = document.getElementById('carouselDots');
+    
+    track.innerHTML = TESTIMONIOS.map(t => `
+        <div class="testimonial-card">
+            <div class="testimonial-avatar">
+                <img src="${t.avatar}" alt="${t.nombre}" onerror="this.src='https://i.pravatar.cc/150?u=default'">
+            </div>
+            <div class="testimonial-content">
+                <div class="testimonial-stars">
+                    ${'<i class="fas fa-star"></i> '.repeat(t.estrellas)}${'<i class="far fa-star"></i> '.repeat(5 - t.estrellas)}
+                </div>
+                <p class="testimonial-text">${t.texto}</p>
+                <div class="testimonial-author">
+                    <h4>${t.nombre}</h4>
+                    <p>${t.fecha}</p>
+                    <span class="vehicle-tag"><i class="fas fa-car"></i> ${t.vehiculo}</span>
+                </div>
+            </div>
+        </div>
+    `).join('');
+    
+    dots.innerHTML = TESTIMONIOS.map((_, i) => `<button class="carousel-dot ${i === 0 ? 'active' : ''}" onclick="goToTestimonial(${i})"></button>`).join('');
+    
+    startCarouselAutoplay();
+}
+
+function goToTestimonial(index) {
+    currentTestimonial = index;
+    const track = document.getElementById('carouselTrack');
+    track.style.transform = `translateX(-${index * 100}%)`;
+    document.querySelectorAll('.carousel-dot').forEach((d, i) => d.classList.toggle('active', i === index));
+    resetCarouselAutoplay();
+}
+
+function nextTestimonial() {
+    goToTestimonial((currentTestimonial + 1) % TESTIMONIOS.length);
+}
+
+function prevTestimonial() {
+    goToTestimonial((currentTestimonial - 1 + TESTIMONIOS.length) % TESTIMONIOS.length);
+}
+
+function startCarouselAutoplay() {
+    carouselInterval = setInterval(nextTestimonial, 5000);
+}
+
+function resetCarouselAutoplay() {
+    clearInterval(carouselInterval);
+    startCarouselAutoplay();
+}
+
+// ============ LANDING INVENTORY ============
+function renderLandingInventory() {
+    const vehiculos = DB.get('vehiculos').filter(v => v.estado === 'Disponible' || v.estado === 'Reservado');
+    document.getElementById('inventoryGrid').innerHTML = vehiculos.slice(0, 6).map(v => `
+        <div class="inventory-card">
+            <div class="card-img">
+                <img src="${v.imagen}" alt="${v.marca} ${v.modelo}" onerror="this.src='${VEHICLE_IMAGES.default}'">
+                <span class="status-badge" style="color:${v.estado==='Disponible'?'#28a745':'#fd7e14'}">${v.estado}</span>
+            </div>
+            <div class="card-body">
+                <h4>${v.marca} ${v.modelo}</h4>
+                <div class="price">$${v.precio.toLocaleString()}</div>
+                <div class="specs">
+                    <span><i class="fas fa-calendar"></i> ${v.anio}</span>
+                    <span><i class="fas fa-tachometer-alt"></i> ${v.kilometraje.toLocaleString()} km</span>
+                    <span><i class="fas fa-car-side"></i> ${v.tipo}</span>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+// ============ FORMULARIO TEST DRIVE (LANDING) ============
+function populateTestDriveVehicles() {
+    const vehiculos = DB.get('vehiculos').filter(v => v.estado === 'Disponible');
+    const select = document.getElementById('td_vehiculo');
+    select.innerHTML = '<option value="">Selecciona un vehículo...</option>' + 
+        vehiculos.map(v => `<option value="${v.id}">${v.marca} ${v.modelo} ${v.anio} - $${v.precio.toLocaleString()}</option>`).join('');
+    
+    // Fecha mínima = mañana
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    document.getElementById('td_fecha').min = tomorrow.toISOString().split('T')[0];
+}
+
+function agendarTestDrive(e) {
+    e.preventDefault();
+    const vehiculo_id = parseInt(document.getElementById('td_vehiculo').value);
+    const vehiculo = DB.get('vehiculos').find(v => v.id === vehiculo_id);
+    const citas = DB.get('citas');
+    
+    const nuevaCita = {
+        id: DB.nextId('citas'),
+        codigo: `TD-2026-${String(citas.length + 1).padStart(4, '0')}`,
+        nombre: document.getElementById('td_nombre').value,
+        email: document.getElementById('td_email').value,
+        telefono: document.getElementById('td_telefono').value,
+        vehiculo_id: vehiculo_id,
+        fecha: document.getElementById('td_fecha').value,
+        hora: document.getElementById('td_hora').value,
+        comentarios: document.getElementById('td_comentarios').value,
+        estado: 'Pendiente',
+        fecha_creacion: new Date().toISOString(),
+        asesor: ''
+    };
+    
+    citas.push(nuevaCita);
+    DB.set('citas', citas);
+    
+    triggerEvent('Cita.Agendada', { codigo: nuevaCita.codigo, vehiculo: `${vehiculo.marca} ${vehiculo.modelo}`, cliente: nuevaCita.nombre });
+    
+    showToast(`¡Cita agendada! Código: ${nuevaCita.codigo}. Te contactaremos pronto.`, 'success');
+    e.target.reset();
+}
+
+function enviarContacto(e) {
+    e.preventDefault();
+    const nombre = document.getElementById('ct_nombre').value;
+    showToast(`¡Gracias ${nombre}! Tu mensaje ha sido enviado.`, 'success');
+    e.target.reset();
+}
+
+// ============ NAVEGACIÓN CMS ============
+document.querySelectorAll('[data-module]').forEach(link => {
+    link.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.querySelectorAll('[data-module]').forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+        loadModule(link.dataset.module);
+    });
+});
+
+function loadModule(module) {
+    const titles = {
+        dashboard: 'Dashboard', vehiculos: 'Gestión de Vehículos', clientes: 'Gestión de Clientes',
+        citas: 'Citas Test Drive', ventas: 'Transacciones de Venta', mantenimientos: 'Postventa y Mantenimientos',
+        ofertas: 'Ofertas y Promociones', usuarios: 'Gestión de Usuarios',
+        auditoria: 'Registro de Auditoría', eventos: 'Motor de Eventos (Webhooks)'
+    };
+    document.getElementById('pageTitle').textContent = titles[module];
+    logAction('Navegación', 'ACCESS_MODULE', { modulo: module });
+    const renderers = {
+        dashboard: renderDashboard, vehiculos: renderVehiculos, clientes: renderClientes,
+        citas: renderCitas, ventas: renderVentas, mantenimientos: renderMantenimientos,
+        ofertas: renderOfertas, usuarios: renderUsuarios, auditoria: renderAuditoria, eventos: renderEventos
+    };
+    renderers[module]();
+}
+
+// ============ DASHBOARD ============
+function renderDashboard() {
+    const vehiculos = DB.get('vehiculos');
+    const ventas = DB.get('ventas');
+    const citas = DB.get('citas');
+    const destacados = vehiculos.filter(v => v.destacado && v.estado === 'Disponible');
+    const citasPendientes = citas.filter(c => c.estado === 'Pendiente').length;
+    const citasConfirmadas = citas.filter(c => c.estado === 'Confirmada').length;
+    
+    const disponibles = vehiculos.filter(v => v.estado === 'Disponible').length;
+    const vendidos = vehiculos.filter(v => v.estado === 'Vendido').length;
+    const ventasMes = ventas.filter(v => v.estado === 'Entregada').length;
+    const ingresos = ventas.filter(v => v.estado === 'Entregada').reduce((s, v) => s + v.total, 0);
+    
+    document.getElementById('contentArea').innerHTML = `
+        <div class="stats-grid">
+            <div class="stat-card">
+                <span class="icon"><i class="fas fa-car"></i></span>
+                <div class="label">Vehículos Disponibles</div>
+                <div class="value">${disponibles}</div>
+            </div>
+            <div class="stat-card green">
+                <span class="icon"><i class="fas fa-check-circle"></i></span>
+                <div class="label">Vendidos</div>
+                <div class="value">${vendidos}</div>
+            </div>
+            <div class="stat-card orange">
+                <span class="icon"><i class="fas fa-handshake"></i></span>
+                <div class="label">Ventas del Mes</div>
+                <div class="value">${ventasMes}</div>
+            </div>
+            <div class="stat-card red">
+                <span class="icon"><i class="fas fa-dollar-sign"></i></span>
+                <div class="label">Ingresos Totales</div>
+                <div class="value">$${ingresos.toLocaleString()}</div>
+            </div>
+            <div class="stat-card purple">
+                <span class="icon"><i class="fas fa-calendar-check"></i></span>
+                <div class="label">Citas Pendientes</div>
+                <div class="value">${citasPendientes}</div>
+            </div>
+            <div class="stat-card green">
+                <span class="icon"><i class="fas fa-calendar-alt"></i></span>
+                <div class="label">Citas Confirmadas</div>
+                <div class="value">${citasConfirmadas}</div>
+            </div>
+        </div>
+        
+        ${destacados.length ? `
+        <div class="featured-section">
+            <h3><i class="fas fa-star" style="color:#ffc107"></i> Vehículos Destacados</h3>
+            <div class="featured-grid">
+                ${destacados.map(v => `
+                    <div class="featured-card" onclick="verDetalleVehiculo(${v.id})">
+                        <div class="img-wrap">
+                            <img src="${v.imagen}" alt="${v.marca} ${v.modelo}" onerror="this.src='${VEHICLE_IMAGES.default}'">
+                            <span class="badge-estado" style="color:${v.estado==='Disponible'?'#28a745':'#fd7e14'}">${v.estado}</span>
+                        </div>
+                        <div class="info">
+                            <h4>${v.marca} ${v.modelo}</h4>
+                            <div class="price">$${v.precio.toLocaleString()}</div>
+                            <div class="details">${v.anio} • ${v.color} • ${v.kilometraje.toLocaleString()} km</div>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+        ` : ''}
+        
+        <div class="charts-grid">
+            <div class="chart-box">
+                <h3><i class="fas fa-chart-line"></i> Ventas por Mes</h3>
+                <canvas id="chartVentas" height="100"></canvas>
+            </div>
+            <div class="chart-box">
+                <h3><i class="fas fa-chart-pie"></i> Tipos de Vehículo</h3>
+                <canvas id="chartTipos"></canvas>
+            </div>
+        </div>
+        
+        <div class="charts-grid">
+            <div class="chart-box">
+                <h3><i class="fas fa-chart-bar"></i> Estado del Inventario</h3>
+                <canvas id="chartEstados" height="100"></canvas>
+            </div>
+            <div class="chart-box">
+                <h3><i class="fas fa-list"></i> Actividad Reciente</h3>
+                ${renderRecentActivity()}
+            </div>
+        </div>
+    `;
+    
+    setTimeout(() => {
+        new Chart(document.getElementById('chartVentas'), {
+            type: 'line',
+            data: { labels: ['May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct'], datasets: [{ label: 'Ventas', data: [3, 5, 4, 7, 6, 8], borderColor: '#e74c3c', backgroundColor: 'rgba(231,76,60,0.1)', tension: 0.3, fill: true }] },
+            options: { responsive: true, maintainAspectRatio: true }
+        });
+        const tipos = {};
+        vehiculos.forEach(v => tipos[v.tipo] = (tipos[v.tipo] || 0) + 1);
+        new Chart(document.getElementById('chartTipos'), {
+            type: 'doughnut',
+            data: { labels: Object.keys(tipos), datasets: [{ data: Object.values(tipos), backgroundColor: ['#1e3c72', '#e74c3c', '#ffc107', '#28a745', '#6c757d'] }] }
+        });
+        const estados = {};
+        vehiculos.forEach(v => estados[v.estado] = (estados[v.estado] || 0) + 1);
+        new Chart(document.getElementById('chartEstados'), {
+            type: 'bar',
+            data: { labels: Object.keys(estados), datasets: [{ label: 'Cantidad', data: Object.values(estados), backgroundColor: '#e74c3c' }] },
+            options: { responsive: true, maintainAspectRatio: true }
+        });
+    }, 100);
+}
+
+function renderRecentActivity() {
+    const logs = DB.get('auditoria').slice(-5).reverse();
+    if (!logs.length) return '<p style="color:#999; text-align:center; padding:20px;">Sin actividad reciente</p>';
+    return logs.map(l => `
+        <div style="padding:10px; border-bottom:1px solid #eee; font-size:13px;">
+            <strong>${l.usuario}</strong> - ${l.accion} en ${l.modulo}
+            <div style="color:#999; font-size:11px;">${new Date(l.fecha_hora).toLocaleString()}</div>
+        </div>
+    `).join('');
+}
+
+// ============ UTILIDADES ============
+function formatCell(value, type) {
+    if (type === 'badge') {
+        const colors = { 'Disponible': 'success', 'Vendido': 'secondary', 'Reservado': 'warning', 'Usado': 'info', 'Entregada': 'success', 'En Legal': 'warning', 'Aprobada': 'info', 'Cotizacion': 'secondary', 'Preventivo': 'info', 'Correctivo': 'warning', 'Revision': 'secondary', 'Pendiente': 'warning', 'Confirmada': 'info', 'Realizada': 'success', 'Cancelada': 'danger' };
+        return `<span class="badge badge-${colors[value] || 'secondary'}">${value}</span>`;
+    }
+    if (type === 'money') return '$' + (value || 0).toLocaleString();
+    if (type === 'boolean') return value ? '<i class="fas fa-check" style="color:green"></i>' : '<i class="fas fa-times" style="color:red"></i>';
+    return value || '-';
+}
+function openModal(title, body, footer, large = false) {
+    document.getElementById('modalTitle').textContent = title;
+    document.getElementById('modalBody').innerHTML = body;
+    document.getElementById('modalFooter').innerHTML = footer || '';
+    document.getElementById('modalBox').classList.toggle('modal-lg', large);
+    document.getElementById('modal').classList.add('active');
+}
+function closeModal() { document.getElementById('modal').classList.remove('active'); }
+function showToast(msg, type = 'success') {
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.innerHTML = `<i class="fas fa-${type === 'error' ? 'times-circle' : type === 'info' ? 'info-circle' : 'check-circle'}"></i> ${msg}`;
+    document.getElementById('toastContainer').appendChild(toast);
+    setTimeout(() => toast.remove(), 3500);
+}
+
+// ============ MÓDULO VEHÍCULOS ============
+let currentVehicleView = 'cards';
+let currentImageBase64 = null;
+
+function renderVehiculos() {
+    const vehiculos = DB.get('vehiculos');
+    document.getElementById('contentArea').innerHTML = `
+        <div class="data-box">
+            <div class="data-box-header">
+                <h3><i class="fas fa-car"></i> Inventario (${vehiculos.length})</h3>
+                <div style="display:flex; gap:10px; align-items:center;">
+                    <div class="view-toggle">
+                        <button class="${currentVehicleView === 'table' ? 'active' : ''}" onclick="switchVehicleView('table')"><i class="fas fa-list"></i></button>
+                        <button class="${currentVehicleView === 'cards' ? 'active' : ''}" onclick="switchVehicleView('cards')"><i class="fas fa-th"></i></button>
+                    </div>
+                    <button class="btn btn-success" onclick="editVehiculo()"><i class="fas fa-plus"></i> Nuevo</button>
+                </div>
+            </div>
+            <div id="vehicleListContainer"></div>
+        </div>
+    `;
+    renderVehicleList();
+}
+
+function switchVehicleView(view) { currentVehicleView = view; renderVehiculos(); }
+
+function renderVehicleList() {
+    const vehiculos = DB.get('vehiculos');
+    const container = document.getElementById('vehicleListContainer');
+    if (currentVehicleView === 'cards') {
+        container.innerHTML = `<div class="cards-grid">${vehiculos.map(v => `
+            <div class="vehicle-card" onclick="verDetalleVehiculo(${v.id})">
+                <div class="card-img">
+                    <img src="${v.imagen}" alt="${v.marca} ${v.modelo}" onerror="this.src='${VEHICLE_IMAGES.default}'">
+                    <div class="overlay-badges">
+                        <span class="badge badge-info">${v.tipo}</span>
+                        <span class="badge badge-${v.estado==='Disponible'?'success':v.estado==='Vendido'?'secondary':'warning'}">${v.estado}</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h4>${v.marca} ${v.modelo}</h4>
+                    <div class="vin">VIN: ${v.vin}</div>
+                    <div class="price">$${v.precio.toLocaleString()}</div>
+                    <div class="specs">
+                        <span><i class="fas fa-calendar"></i> ${v.anio}</span>
+                        <span><i class="fas fa-palette"></i> ${v.color}</span>
+                        <span><i class="fas fa-tachometer-alt"></i> ${v.kilometraje.toLocaleString()} km</span>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <span style="font-size:12px; color:#6c757d;"><i class="fas fa-building"></i> ${v.agencia}</span>
+                    <div style="display:flex; gap:5px;">
+                        <button class="btn btn-info btn-sm" onclick="event.stopPropagation(); editVehiculo(${v.id})"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-danger btn-sm" onclick="event.stopPropagation(); deleteVehiculo(${v.id})"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+            </div>
+        `).join('')}</div>`;
+    } else {
+        container.innerHTML = `<table>
+            <thead><tr><th>Foto</th><th>VIN</th><th>Vehículo</th><th>Año</th><th>Tipo</th><th>Estado</th><th>Precio</th><th>Km</th><th>Agencia</th><th>Acciones</th></tr></thead>
+            <tbody>${vehiculos.map(v => `<tr>
+                <td><img src="${v.imagen}" class="vehicle-thumb" onclick="verDetalleVehiculo(${v.id})" onerror="this.src='${VEHICLE_IMAGES.default}'"></td>
+                <td style="font-family:monospace; font-size:11px;">${v.vin}</td>
+                <td><strong>${v.marca}</strong> ${v.modelo}</td>
+                <td>${v.anio}</td>
+                <td>${formatCell(v.tipo, 'badge')}</td>
+                <td>${formatCell(v.estado, 'badge')}</td>
+                <td>$${v.precio.toLocaleString()}</td>
+                <td>${v.kilometraje.toLocaleString()}</td>
+                <td>${v.agencia}</td>
+                <td class="actions-cell">
+                    <button class="btn btn-info btn-sm" onclick="verDetalleVehiculo(${v.id})"><i class="fas fa-eye"></i></button>
+                    <button class="btn btn-warning btn-sm" onclick="editVehiculo(${v.id})"><i class="fas fa-edit"></i></button>
+                    <button class="btn btn-danger btn-sm" onclick="deleteVehiculo(${v.id})"><i class="fas fa-trash"></i></button>
+                </td>
+            </tr>`).join('')}</tbody></table>`;
+    }
+}
+
+function verDetalleVehiculo(id) {
+    const v = DB.get('vehiculos').find(x => x.id === id);
+    if (!v) return;
+    logAction('Vehículos', 'VIEW_DETAIL', { vin: v.vin });
+    openModal(`${v.marca} ${v.modelo} ${v.anio}`, `
+        <div class="vehicle-detail">
+            <div><div class="vehicle-detail-img"><img src="${v.imagen}" alt="${v.marca} ${v.modelo}" onerror="this.src='${VEHICLE_IMAGES.default}'"></div></div>
+            <div class="vehicle-detail-info">
+                <h2>${v.marca} ${v.modelo}</h2>
+                <div class="vin-display">VIN: ${v.vin}</div>
+                <div class="price-big">$${v.precio.toLocaleString()}</div>
+                <div style="margin-bottom:15px;">
+                    ${formatCell(v.estado, 'badge')}
+                    ${v.asegurado ? '<span class="badge badge-success" style="margin-left:5px;"><i class="fas fa-shield-alt"></i> Asegurado</span>' : ''}
+                </div>
+                <ul class="specs-list">
+                    <li><strong>Año:</strong><span>${v.anio}</span></li>
+                    <li><strong>Color:</strong><span>${v.color}</span></li>
+                    <li><strong>Tipo:</strong><span>${v.tipo}</span></li>
+                    <li><strong>Kilometraje:</strong><span>${v.kilometraje.toLocaleString()} km</span></li>
+                    <li><strong>Impuestos:</strong><span>$${v.impuestos.toLocaleString()}</span></li>
+                    <li><strong>Agencia:</strong><span>${v.agencia}</span></li>
+                    <li><strong>Fecha Ingreso:</strong><span>${v.fecha_ingreso}</span></li>
+                </ul>
+            </div>
+        </div>
+    `, `<button class="btn btn-warning" onclick="closeModal(); editVehiculo(${v.id})"><i class="fas fa-edit"></i> Editar</button><button class="btn btn-secondary" onclick="closeModal()">Cerrar</button>`, true);
+}
+
+function editVehiculo(id = null) {
+    const v = id ? DB.get('vehiculos').find(x => x.id === id) : { vin: '', marca: '', modelo: '', anio: 2026, color: '', tipo: 'Sedan', estado: 'Disponible', precio: 0, kilometraje: 0, agencia: 'Sede Principal', asegurado: false, imagen: null, destacado: false };
+    currentImageBase64 = v.imagen && v.imagen.startsWith('data:') ? v.imagen : null;
+    const currentImageUrl = v.imagen && !v.imagen.startsWith('data:') ? v.imagen : null;
+    
+    openModal(id ? 'Editar Vehículo' : 'Nuevo Vehículo', `
+        <div class="form-group">
+            <label>Fotografía del Vehículo</label>
+            <div class="image-upload-area ${currentImageBase64 || currentImageUrl ? 'has-image' : ''}" id="uploadArea" onclick="document.getElementById('f_imagen').click()">
+                ${currentImageBase64 
+                    ? `<img src="${currentImageBase64}" class="image-preview"><div class="image-preview-actions"><button type="button" class="btn btn-sm btn-secondary" onclick="event.stopPropagation(); cambiarImagen()"><i class="fas fa-camera"></i> Cambiar</button><button type="button" class="btn btn-sm btn-danger" onclick="event.stopPropagation(); quitarImagen()">Quitar</button></div>`
+                    : currentImageUrl
+                    ? `<img src="${currentImageUrl}" class="image-preview"><p style="font-size:11px; color:#28a745; margin-top:5px;"><i class="fas fa-check"></i> Imagen oficial</p><div class="image-preview-actions"><button type="button" class="btn btn-sm btn-secondary" onclick="event.stopPropagation(); cambiarImagen()"><i class="fas fa-camera"></i> Subir otra</button></div>`
+                    : `<i class="fas fa-cloud-upload-alt upload-icon"></i><p><strong>Click para subir imagen</strong></p><p style="font-size:11px;">Se asignará imagen oficial si no subes</p>`}
+                <input type="file" id="f_imagen" accept="image/*" onchange="handleImageUpload(event)">
+            </div>
+        </div>
+        <div class="form-group"><label>VIN (17 caracteres)</label><input id="f_vin" value="${v.vin}" maxlength="17"></div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+            <div class="form-group"><label>Marca</label><input id="f_marca" value="${v.marca}"></div>
+            <div class="form-group"><label>Modelo</label><input id="f_modelo" value="${v.modelo}"></div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;">
+            <div class="form-group"><label>Año</label><input type="number" id="f_anio" value="${v.anio}"></div>
+            <div class="form-group"><label>Color</label><input id="f_color" value="${v.color}"></div>
+            <div class="form-group"><label>Kilometraje</label><input type="number" id="f_km" value="${v.kilometraje}"></div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+            <div class="form-group"><label>Tipo</label><select id="f_tipo">${['Sedan','SUV','Camión','Carga','Otro'].map(t => `<option ${v.tipo===t?'selected':''}>${t}</option>`).join('')}</select></div>
+            <div class="form-group"><label>Estado</label><select id="f_estado">${['Disponible','Reservado','Vendido','Usado'].map(t => `<option ${v.estado===t?'selected':''}>${t}</option>`).join('')}</select></div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+            <div class="form-group"><label>Precio ($)</label><input type="number" id="f_precio" value="${v.precio}"></div>
+            <div class="form-group"><label>Agencia</label><select id="f_agencia"><option ${v.agencia==='Sede Principal'?'selected':''}>Sede Principal</option><option ${v.agencia==='Sede Norte'?'selected':''}>Sede Norte</option></select></div>
+        </div>
+        <div style="display:flex; gap:20px;">
+            <label style="display:flex; align-items:center; gap:5px;"><input type="checkbox" id="f_asegurado" ${v.asegurado?'checked':''}> Asegurado</label>
+            <label style="display:flex; align-items:center; gap:5px;"><input type="checkbox" id="f_destacado" ${v.destacado?'checked':''}> Destacado</label>
+        </div>
+    `, `<button class="btn btn-primary" onclick="saveVehiculo(${id || 'null'})"><i class="fas fa-save"></i> Guardar</button>`);
+}
+
+async function handleImageUpload(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) { showToast('Máximo 5MB', 'error'); return; }
+    try {
+        showToast('Procesando...', 'info');
+        const compressed = await compressImage(file, 800, 0.7);
+        currentImageBase64 = compressed;
+        const area = document.getElementById('uploadArea');
+        area.classList.add('has-image');
+        area.innerHTML = `<img src="${compressed}" class="image-preview"><div class="image-preview-actions"><button type="button" class="btn btn-sm btn-secondary" onclick="event.stopPropagation(); cambiarImagen()"><i class="fas fa-camera"></i> Cambiar</button><button type="button" class="btn btn-sm btn-danger" onclick="event.stopPropagation(); quitarImagen()">Quitar</button></div><input type="file" id="f_imagen" accept="image/*" onchange="handleImageUpload(event)">`;
+        showToast('Imagen cargada');
+    } catch (err) { showToast('Error', 'error'); }
+}
+
+function cambiarImagen() { document.getElementById('f_imagen').click(); }
+function quitarImagen() {
+    currentImageBase64 = null;
+    const area = document.getElementById('uploadArea');
+    area.classList.remove('has-image');
+    area.innerHTML = `<i class="fas fa-cloud-upload-alt upload-icon"></i><p><strong>Click para subir</strong></p><input type="file" id="f_imagen" accept="image/*" onchange="handleImageUpload(event)">`;
+}
+
+function saveVehiculo(id) {
+    const data = DB.get('vehiculos');
+    const vin = document.getElementById('f_vin').value.toUpperCase();
+    if (vin.length !== 17) { showToast('VIN debe tener 17 caracteres', 'error'); return; }
+    if (data.some(v => v.vin === vin && v.id !== id)) { showToast('VIN duplicado', 'error'); return; }
+    const marca = document.getElementById('f_marca').value;
+    const modelo = document.getElementById('f_modelo').value;
+    const precio = parseFloat(document.getElementById('f_precio').value);
+    let imagenFinal = currentImageBase64 || getVehicleImage(marca, modelo);
+    const obj = {
+        id: id || DB.nextId('vehiculos'), vin, marca, modelo,
+        anio: parseInt(document.getElementById('f_anio').value),
+        color: document.getElementById('f_color').value,
+        tipo: document.getElementById('f_tipo').value,
+        estado: document.getElementById('f_estado').value,
+        precio, impuestos: precio * 0.16,
+        kilometraje: parseInt(document.getElementById('f_km').value),
+        agencia: document.getElementById('f_agencia').value,
+        asegurado: document.getElementById('f_asegurado').checked,
+        destacado: document.getElementById('f_destacado').checked,
+        imagen: imagenFinal,
+        fecha_ingreso: id ? data.find(x => x.id === id).fecha_ingreso : new Date().toISOString().split('T')[0]
+    };
+    try {
+        if (id) { data[data.findIndex(x => x.id === id)] = obj; logAction('Vehículos', 'UPDATE', { vin }); }
+        else { data.push(obj); logAction('Vehículos', 'CREATE', { vin }); triggerEvent('Vehiculo.Ingresado', { vin, marca, modelo }); }
+        DB.set('vehiculos', data);
+        closeModal(); renderVehiculos(); showToast('Vehículo guardado');
+    } catch (err) { showToast('Error al guardar', 'error'); }
+}
+
+function deleteVehiculo(id) {
+    if (!confirm('¿Eliminar?')) return;
+    DB.set('vehiculos', DB.get('vehiculos').filter(x => x.id !== id));
+    logAction('Vehículos', 'DELETE', { id });
+    renderVehiculos(); showToast('Eliminado');
+}
+
+// ============ MÓDULO CITAS TEST DRIVE ============
+function renderCitas() {
+    const citas = DB.get('citas');
+    const vehiculos = DB.get('vehiculos');
+    const pendientes = citas.filter(c => c.estado === 'Pendiente').length;
+    const confirmadas = citas.filter(c => c.estado === 'Confirmada').length;
+    const realizadas = citas.filter(c => c.estado === 'Realizada').length;
+    
+    document.getElementById('contentArea').innerHTML = `
+        <div class="stats-grid" style="margin-bottom:20px;">
+            <div class="stat-card orange">
+                <span class="icon"><i class="fas fa-clock"></i></span>
+                <div class="label">Pendientes</div>
+                <div class="value">${pendientes}</div>
+            </div>
+            <div class="stat-card" style="border-left-color:#17a2b8;">
+                <span class="icon"><i class="fas fa-calendar-check"></i></span>
+                <div class="label">Confirmadas</div>
+                <div class="value">${confirmadas}</div>
+            </div>
+            <div class="stat-card green">
+                <span class="icon"><i class="fas fa-check-double"></i></span>
+                <div class="label">Realizadas</div>
+                <div class="value">${realizadas}</div>
+            </div>
+            <div class="stat-card red">
+                <span class="icon"><i class="fas fa-calendar-alt"></i></span>
+                <div class="label">Total Citas</div>
+                <div class="value">${citas.length}</div>
+            </div>
+        </div>
+        
+        <div class="data-box">
+            <div class="data-box-header">
+                <h3><i class="fas fa-calendar-check"></i> Gestión de Citas Test Drive</h3>
+                <button class="btn btn-success" onclick="editCita()"><i class="fas fa-plus"></i> Nueva Cita</button>
+            </div>
+            <table>
+                <thead><tr>
+                    <th>Código</th><th>Cliente</th><th>Teléfono</th><th>Vehículo</th>
+                    <th>Fecha</th><th>Hora</th><th>Asesor</th><th>Estado</th><th>Acciones</th>
+                </tr></thead>
+                <tbody>
+                    ${citas.map(c => {
+                        const v = vehiculos.find(x => x.id === c.vehiculo_id);
+                        return `<tr>
+                            <td><strong>${c.codigo}</strong></td>
+                            <td>
+                                <div><strong>${c.nombre}</strong></div>
+                                <div style="font-size:11px; color:#6c757d;">${c.email}</div>
+                            </td>
+                            <td>${c.telefono}</td>
+                            <td>
+                                <div style="display:flex; align-items:center; gap:8px;">
+                                    ${v?.imagen ? `<img src="${v.imagen}" style="width:40px; height:28px; object-fit:cover; border-radius:3px;">` : ''}
+                                    <span style="font-size:12px;">${v ? `${v.marca} ${v.modelo}` : '-'}</span>
+                                </div>
+                            </td>
+                            <td>${c.fecha}</td>
+                            <td><span class="badge badge-info">${c.hora}</span></td>
+                            <td>${c.asesor || '<span style="color:#999;">Sin asignar</span>'}</td>
+                            <td>${formatCell(c.estado, 'badge')}</td>
+                            <td class="actions-cell">
+                                <button class="btn btn-info btn-sm" onclick="verDetalleCita(${c.id})" title="Ver"><i class="fas fa-eye"></i></button>
+                                ${c.estado === 'Pendiente' ? `<button class="btn btn-success btn-sm" onclick="cambiarEstadoCita(${c.id}, 'Confirmada')" title="Confirmar"><i class="fas fa-check"></i></button>` : ''}
+                                ${c.estado === 'Confirmada' ? `<button class="btn btn-warning btn-sm" onclick="cambiarEstadoCita(${c.id}, 'Realizada')" title="Completar"><i class="fas fa-flag-checkered"></i></button>` : ''}
+                                ${c.estado !== 'Cancelada' && c.estado !== 'Realizada' ? `<button class="btn btn-danger btn-sm" onclick="cambiarEstadoCita(${c.id}, 'Cancelada')" title="Cancelar"><i class="fas fa-times"></i></button>` : ''}
+                                <button class="btn btn-secondary btn-sm" onclick="deleteCita(${c.id})" title="Eliminar"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>`;
+                    }).join('')}
+                </tbody>
+            </table>
+        </div>
+    `;
+}
+
+function verDetalleCita(id) {
+    const c = DB.get('citas').find(x => x.id === id);
+    const v = DB.get('vehiculos').find(x => x.id === c.vehiculo_id);
+    if (!c) return;
+    openModal(`Cita ${c.codigo}`, `
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+            <div>
+                <div style="background:#f8f9fa; padding:15px; border-radius:8px; margin-bottom:15px;">
+                    <h4 style="color:#1e3c72; margin-bottom:10px;"><i class="fas fa-user"></i> Datos del Cliente</h4>
+                    <p><strong>Nombre:</strong> ${c.nombre}</p>
+                    <p><strong>Email:</strong> ${c.email}</p>
+                    <p><strong>Teléfono:</strong> ${c.telefono}</p>
+                </div>
+                <div style="background:#f8f9fa; padding:15px; border-radius:8px;">
+                    <h4 style="color:#1e3c72; margin-bottom:10px;"><i class="fas fa-calendar"></i> Detalles de la Cita</h4>
+                    <p><strong>Fecha:</strong> ${c.fecha}</p>
+                    <p><strong>Hora:</strong> ${c.hora}</p>
+                    <p><strong>Estado:</strong> ${formatCell(c.estado, 'badge')}</p>
+                    <p><strong>Asesor:</strong> ${c.asesor || 'Sin asignar'}</p>
+                    <p style="margin-top:10px;"><strong>Comentarios:</strong><br><em>${c.comentarios || 'Ninguno'}</em></p>
+                </div>
+            </div>
+            <div>
+                <div style="background:#f8f9fa; padding:15px; border-radius:8px;">
+                    <h4 style="color:#1e3c72; margin-bottom:10px;"><i class="fas fa-car"></i> Vehículo</h4>
+                    ${v ? `
+                        <img src="${v.imagen}" style="width:100%; height:150px; object-fit:cover; border-radius:5px; margin-bottom:10px;">
+                        <p><strong>${v.marca} ${v.modelo}</strong></p>
+                        <p style="font-size:12px; color:#6c757d;">${v.anio} • ${v.color}</p>
+                        <p style="font-size:18px; color:#e74c3c; font-weight:bold; margin-top:5px;">$${v.precio.toLocaleString()}</p>
+                    ` : '<p>Vehículo no encontrado</p>'}
+                </div>
+                <div style="background:#fff3cd; padding:15px; border-radius:8px; margin-top:15px; font-size:12px; color:#856404;">
+                    <i class="fas fa-info-circle"></i> Cita creada: ${new Date(c.fecha_creacion).toLocaleString()}
+                </div>
+            </div>
+        </div>
+    `, `<button class="btn btn-secondary" onclick="closeModal()">Cerrar</button>`, true);
+}
+
+function editCita() {
+    const vehiculos = DB.get('vehiculos').filter(v => v.estado === 'Disponible');
+    const usuarios = DB.get('usuarios').filter(u => u.rol === 'Vendedor' || u.rol === 'Gerente');
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    
+    openModal('Nueva Cita Test Drive', `
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+            <div class="form-group"><label>Nombre del cliente *</label><input id="f_nombre" required></div>
+            <div class="form-group"><label>Teléfono *</label><input id="f_telefono" required></div>
+        </div>
+        <div class="form-group"><label>Email *</label><input type="email" id="f_email" required></div>
+        <div class="form-group"><label>Vehículo *</label><select id="f_vehiculo">
+            ${vehiculos.map(v => `<option value="${v.id}">${v.marca} ${v.modelo} ${v.anio}</option>`).join('')}
+        </select></div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+            <div class="form-group"><label>Fecha *</label><input type="date" id="f_fecha" min="${tomorrow.toISOString().split('T')[0]}" value="${tomorrow.toISOString().split('T')[0]}" required></div>
+            <div class="form-group"><label>Hora *</label><select id="f_hora">
+                <option>09:00 AM</option><option>10:00 AM</option><option>11:00 AM</option>
+                <option>12:00 PM</option><option>02:00 PM</option><option>03:00 PM</option>
+                <option>04:00 PM</option><option>05:00 PM</option>
+            </select></div>
+        </div>
+        <div class="form-group"><label>Asesor asignado</label><select id="f_asesor">
+            <option value="">-- Sin asignar --</option>
+            ${usuarios.map(u => `<option>${u.nombre}</option>`).join('')}
+        </select></div>
+        <div class="form-group"><label>Comentarios</label><textarea id="f_comentarios" rows="2"></textarea></div>
+    `, `<button class="btn btn-primary" onclick="saveCita()"><i class="fas fa-save"></i> Crear Cita</button>`);
+}
+
+function saveCita() {
+    const nombre = document.getElementById('f_nombre').value;
+    const email = document.getElementById('f_email').value;
+    const telefono = document.getElementById('f_telefono').value;
+    if (!nombre || !email || !telefono) { showToast('Completa los campos obligatorios', 'error'); return; }
+    
+    const vehiculo_id = parseInt(document.getElementById('f_vehiculo').value);
+    const vehiculo = DB.get('vehiculos').find(v => v.id === vehiculo_id);
+    const citas = DB.get('citas');
+    
+    const nueva = {
+        id: DB.nextId('citas'),
+        codigo: `TD-2026-${String(citas.length + 1).padStart(4, '0')}`,
+        nombre, email, telefono, vehiculo_id,
+        fecha: document.getElementById('f_fecha').value,
+        hora: document.getElementById('f_hora').value,
+        comentarios: document.getElementById('f_comentarios').value,
+        estado: 'Pendiente',
+        fecha_creacion: new Date().toISOString(),
+        asesor: document.getElementById('f_asesor').value
+    };
+    
+    citas.push(nueva);
+    DB.set('citas', citas);
+    logAction('Citas', 'CREATE', { codigo: nueva.codigo });
+    triggerEvent('Cita.Agendada', { codigo: nueva.codigo, vehiculo: `${vehiculo.marca} ${vehiculo.modelo}`, cliente: nombre });
+    closeModal(); renderCitas(); showToast('Cita creada: ' + nueva.codigo);
+}
+
+function cambiarEstadoCita(id, nuevoEstado) {
+    const citas = DB.get('citas');
+    const idx = citas.findIndex(c => c.id === id);
+    const anterior = citas[idx].estado;
+    citas[idx].estado = nuevoEstado;
+    DB.set('citas', citas);
+    
+    logAction('Citas', 'UPDATE_ESTADO', { codigo: citas[idx].codigo, de: anterior, a: nuevoEstado });
+    
+    const vehiculo = DB.get('vehiculos').find(v => v.id === citas[idx].vehiculo_id);
+    triggerEvent(`Cita.${nuevoEstado}`, { codigo: citas[idx].codigo, vehiculo: `${vehiculo.marca} ${vehiculo.modelo}`, cliente: citas[idx].nombre });
+    
+    renderCitas();
+    showToast(`Cita ${nuevoEstado.toLowerCase()}`);
+}
+
+function deleteCita(id) {
+    if (!confirm('¿Eliminar cita?')) return;
+    DB.set('citas', DB.get('citas').filter(x => x.id !== id));
+    logAction('Citas', 'DELETE', { id });
+    renderCitas(); showToast('Cita eliminada');
+}
+
+// ============ RESTO DE MÓDULOS ============
+function renderClientes() {
+    const data = DB.get('clientes');
+    document.getElementById('contentArea').innerHTML = `
+        <div class="data-box">
+            <div class="data-box-header">
+                <h3><i class="fas fa-users"></i> Clientes</h3>
+                <button class="btn btn-success" onclick="editCliente()"><i class="fas fa-plus"></i> Nuevo</button>
+            </div>
+            <table>
+                <thead><tr><th>Nombre</th><th>Documento</th><th>Email</th><th>Teléfono</th><th>Vendedor</th><th>Acciones</th></tr></thead>
+                <tbody>${data.map(c => `<tr>
+                    <td><strong>${c.nombre}</strong></td><td>${c.documento}</td><td>${c.email}</td>
+                    <td>${c.telefono}</td><td>${c.vendedor}</td>
+                    <td class="actions-cell">
+                        <button class="btn btn-info btn-sm" onclick="editCliente(${c.id})"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteCliente(${c.id})"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>`).join('')}</tbody>
+            </table>
+        </div>
+    `;
+}
+
+function editCliente(id = null) {
+    const c = id ? DB.get('clientes').find(x => x.id === id) : { nombre: '', documento: '', email: '', telefono: '', direccion: '', vendedor: '' };
+    const vendedores = DB.get('usuarios').filter(u => u.rol === 'Vendedor' || u.rol === 'Gerente');
+    openModal(id ? 'Editar Cliente' : 'Nuevo Cliente', `
+        <div class="form-group"><label>Nombre</label><input id="f_nombre" value="${c.nombre}"></div>
+        <div class="form-group"><label>Documento</label><input id="f_documento" value="${c.documento}"></div>
+        <div class="form-group"><label>Email</label><input type="email" id="f_email" value="${c.email}"></div>
+        <div class="form-group"><label>Teléfono</label><input id="f_telefono" value="${c.telefono}"></div>
+        <div class="form-group"><label>Dirección</label><input id="f_direccion" value="${c.direccion}"></div>
+        <div class="form-group"><label>Vendedor</label><select id="f_vendedor">
+            <option value="">-- Sin asignar --</option>
+            ${vendedores.map(v => `<option ${c.vendedor===v.nombre?'selected':''}>${v.nombre}</option>`).join('')}
+        </select></div>
+    `, `<button class="btn btn-primary" onclick="saveCliente(${id || 'null'})">Guardar</button>`);
+}
+
+function saveCliente(id) {
+    const data = DB.get('clientes');
+    const obj = { id: id || DB.nextId('clientes'), nombre: document.getElementById('f_nombre').value, documento: document.getElementById('f_documento').value, email: document.getElementById('f_email').value, telefono: document.getElementById('f_telefono').value, direccion: document.getElementById('f_direccion').value, vendedor: document.getElementById('f_vendedor').value, fecha_registro: new Date().toISOString().split('T')[0] };
+    if (id) { data[data.findIndex(x => x.id === id)] = obj; } else { data.push(obj); triggerEvent('Cliente.Registrado', { nombre: obj.nombre }); }
+    DB.set('clientes', data);
+    closeModal(); renderClientes(); showToast('Cliente guardado');
+}
+
+function deleteCliente(id) {
+    if (!confirm('¿Eliminar?')) return;
+    DB.set('clientes', DB.get('clientes').filter(x => x.id !== id));
+    renderClientes(); showToast('Eliminado');
+}
+
+function renderVentas() {
+    const ventas = DB.get('ventas');
+    const clientes = DB.get('clientes');
+    const vehiculos = DB.get('vehiculos');
+    document.getElementById('contentArea').innerHTML = `
+        <div class="data-box">
+            <div class="data-box-header">
+                <h3><i class="fas fa-handshake"></i> Transacciones</h3>
+                <button class="btn btn-success" onclick="editVenta()"><i class="fas fa-plus"></i> Nueva</button>
+            </div>
+            <table>
+                <thead><tr><th>Código</th><th>Cliente</th><th>Vehículo</th><th>Modalidad</th><th>Total</th><th>Estado</th><th>Fecha</th><th>Acciones</th></tr></thead>
+                <tbody>${ventas.map(v => {
+                    const c = clientes.find(x => x.id === v.cliente_id);
+                    const vh = vehiculos.find(x => x.id === v.vehiculo_id);
+                    return `<tr>
+                        <td><strong>${v.codigo}</strong></td>
+                        <td>${c?.nombre || '-'}</td>
+                        <td>${vh ? `${vh.marca} ${vh.modelo}` : '-'}</td>
+                        <td><span class="badge badge-info">${v.modalidad}</span></td>
+                        <td>$${v.total.toLocaleString()}</td>
+                        <td>${formatCell(v.estado, 'badge')}</td>
+                        <td>${v.fecha}</td>
+                        <td class="actions-cell">
+                            <button class="btn btn-warning btn-sm" onclick="cambiarEstadoVenta(${v.id})"><i class="fas fa-arrow-right"></i></button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteVenta(${v.id})"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>`;
+                }).join('')}</tbody>
+            </table>
+        </div>
+    `;
+}
+
+function editVenta() {
+    const clientes = DB.get('clientes');
+    const vehiculos = DB.get('vehiculos').filter(v => v.estado === 'Disponible' || v.estado === 'Reservado');
+    const ventas = DB.get('ventas');
+    const codigo = `VTA-2026-${String(ventas.length + 1).padStart(4, '0')}`;
+    openModal('Nueva Venta', `
+        <div class="form-group"><label>Código</label><input value="${codigo}" disabled></div>
+        <div class="form-group"><label>Cliente</label><select id="f_cliente">${clientes.map(c => `<option value="${c.id}">${c.nombre}</option>`).join('')}</select></div>
+        <div class="form-group"><label>Vehículo</label><select id="f_vehiculo">${vehiculos.map(v => `<option value="${v.id}">${v.marca} ${v.modelo} - $${v.precio}</option>`).join('')}</select></div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+            <div class="form-group"><label>Tipo</label><select id="f_tipo"><option>Venta</option><option>Compra</option><option>Permuta</option></select></div>
+            <div class="form-group"><label>Modalidad</label><select id="f_modalidad"><option>Contado</option><option>Financiado</option><option>Mixto</option></select></div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+            <div class="form-group"><label>Descuento ($)</label><input type="number" id="f_descuento" value="0"></div>
+            <div class="form-group"><label>Vendedor</label><input id="f_vendedor" value="${currentUser.nombre}"></div>
+        </div>
+    `, `<button class="btn btn-primary" onclick="saveVenta('${codigo}')">Crear</button>`);
+}
+
+function saveVenta(codigo) {
+    const cliente_id = parseInt(document.getElementById('f_cliente').value);
+    const vehiculo_id = parseInt(document.getElementById('f_vehiculo').value);
+    const vehiculo = DB.get('vehiculos').find(v => v.id === vehiculo_id);
+    const descuento = parseFloat(document.getElementById('f_descuento').value) || 0;
+    const venta = { id: DB.nextId('ventas'), codigo, cliente_id, vehiculo_id, vendedor: document.getElementById('f_vendedor').value, tipo: document.getElementById('f_tipo').value, modalidad: document.getElementById('f_modalidad').value, subtotal: vehiculo.precio, impuestos: vehiculo.impuestos, descuento, total: vehiculo.precio + vehiculo.impuestos - descuento, estado: 'Cotizacion', fecha: new Date().toISOString().split('T')[0] };
+    const ventas = DB.get('ventas'); ventas.push(venta); DB.set('ventas', ventas);
+    const vehiculos = DB.get('vehiculos'); vehiculos.find(v => v.id === vehiculo_id).estado = 'Reservado'; DB.set('vehiculos', vehiculos);
+    logAction('Ventas', 'CREATE', { codigo });
+    triggerEvent('Venta.Creada', { codigo, cliente_id, vehiculo_id });
+    closeModal(); renderVentas(); showToast('Venta creada');
+}
+
+function cambiarEstadoVenta(id) {
+    const ventas = DB.get('ventas');
+    const idx = ventas.findIndex(v => v.id === id);
+    const flujo = ['Cotizacion', 'Aprobada', 'En Legal', 'Entregada'];
+    const actual = flujo.indexOf(ventas[idx].estado);
+    if (actual >= flujo.length - 1) { showToast('Venta completada', 'info'); return; }
+    const nuevoEstado = flujo[actual + 1];
+    ventas[idx].estado = nuevoEstado;
+    DB.set('ventas', ventas);
+    logAction('Ventas', 'UPDATE_ESTADO', { codigo: ventas[idx].codigo, estado: nuevoEstado });
+    triggerEvent(`Venta.${nuevoEstado}`, { codigo: ventas[idx].codigo });
+    if (nuevoEstado === 'Entregada') {
+        const vehiculos = DB.get('vehiculos');
+        vehiculos.find(x => x.id === ventas[idx].vehiculo_id).estado = 'Vendido';
+        DB.set('vehiculos', vehiculos);
+    }
+    renderVentas(); showToast(`Estado: ${nuevoEstado}`);
+}
+
+function deleteVenta(id) {
+    if (!confirm('¿Eliminar?')) return;
+    DB.set('ventas', DB.get('ventas').filter(x => x.id !== id));
+    renderVentas(); showToast('Eliminada');
+}
+
+function renderMantenimientos() {
+    const mantenimientos = DB.get('mantenimientos');
+    const vehiculos = DB.get('vehiculos');
+    const clientes = DB.get('clientes');
+    document.getElementById('contentArea').innerHTML = `
+        <div class="data-box">
+            <div class="data-box-header">
+                <h3><i class="fas fa-wrench"></i> Postventa</h3>
+                <button class="btn btn-success" onclick="editMantenimiento()"><i class="fas fa-plus"></i> Nuevo</button>
+            </div>
+            <table>
+                <thead><tr><th>Vehículo</th><th>Cliente</th><th>Km</th><th>Tipo</th><th>Descripción</th><th>Costo</th><th>Estado</th><th>Acciones</th></tr></thead>
+                <tbody>${mantenimientos.map(m => {
+                    const v = vehiculos.find(x => x.id === m.vehiculo_id);
+                    const c = clientes.find(x => x.id === m.cliente_id);
+                    return `<tr>
+                        <td><div style="display:flex; align-items:center; gap:8px;">${v?.imagen ? `<img src="${v.imagen}" style="width:50px; height:35px; object-fit:cover; border-radius:3px;">` : ''}<span>${v ? `${v.marca} ${v.modelo}` : '-'}</span></div></td>
+                        <td>${c?.nombre || '-'}</td>
+                        <td>${m.kilometraje.toLocaleString()}</td>
+                        <td>${formatCell(m.tipo, 'badge')}</td>
+                        <td>${m.descripcion}</td>
+                        <td>$${m.costo}</td>
+                        <td>${m.realizado ? '<span class="badge badge-success">✓ Sí</span>' : '<span class="badge badge-warning">⏳ Pendiente</span>'}</td>
+                        <td class="actions-cell">
+                            ${!m.realizado ? `<button class="btn btn-success btn-sm" onclick="completarMantenimiento(${m.id})"><i class="fas fa-check"></i></button>` : ''}
+                            <button class="btn btn-danger btn-sm" onclick="deleteMantenimiento(${m.id})"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>`;
+                }).join('')}</tbody>
+            </table>
+        </div>
+    `;
+}
+
+function editMantenimiento() {
+    const vehiculos = DB.get('vehiculos');
+    const clientes = DB.get('clientes');
+    openModal('Nuevo Mantenimiento', `
+        <div class="form-group"><label>Vehículo</label><select id="f_vehiculo">${vehiculos.map(v => `<option value="${v.id}">${v.marca} ${v.modelo}</option>`).join('')}</select></div>
+        <div class="form-group"><label>Cliente</label><select id="f_cliente">${clientes.map(c => `<option value="${c.id}">${c.nombre}</option>`).join('')}</select></div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+            <div class="form-group"><label>Kilometraje</label><input type="number" id="f_km" value="0"></div>
+            <div class="form-group"><label>Tipo</label><select id="f_tipo"><option>Preventivo</option><option>Correctivo</option><option>Revision</option></select></div>
+        </div>
+        <div class="form-group"><label>Descripción</label><textarea id="f_desc" rows="3"></textarea></div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+            <div class="form-group"><label>Costo ($)</label><input type="number" id="f_costo" value="0"></div>
+            <div class="form-group"><label>Fecha</label><input type="date" id="f_fecha" value="${new Date().toISOString().split('T')[0]}"></div>
+        </div>
+    `, `<button class="btn btn-primary" onclick="saveMantenimiento()">Guardar</button>`);
+}
+
+function saveMantenimiento() {
+    const data = DB.get('mantenimientos');
+    data.push({ id: DB.nextId('mantenimientos'), vehiculo_id: parseInt(document.getElementById('f_vehiculo').value), cliente_id: parseInt(document.getElementById('f_cliente').value), kilometraje: parseInt(document.getElementById('f_km').value), tipo: document.getElementById('f_tipo').value, descripcion: document.getElementById('f_desc').value, costo: parseFloat(document.getElementById('f_costo').value), realizado: false, fecha_programada: document.getElementById('f_fecha').value });
+    DB.set('mantenimientos', data);
+    logAction('Mantenimientos', 'CREATE', {});
+    triggerEvent('Mantenimiento.Programado', {});
+    closeModal(); renderMantenimientos(); showToast('Mantenimiento programado');
+}
+
+function completarMantenimiento(id) {
+    const data = DB.get('mantenimientos');
+    const idx = data.findIndex(x => x.id === id);
+    data[idx].realizado = true;
+    data[idx].fecha_realizacion = new Date().toISOString().split('T')[0];
+    DB.set('mantenimientos', data);
+    renderMantenimientos(); showToast('Completado');
+}
+
+function deleteMantenimiento(id) {
+    if (!confirm('¿Eliminar?')) return;
+    DB.set('mantenimientos', DB.get('mantenimientos').filter(x => x.id !== id));
+    renderMantenimientos(); showToast('Eliminado');
+}
+
+function renderOfertas() {
+    const data = DB.get('ofertas');
+    document.getElementById('contentArea').innerHTML = `
+        <div class="data-box">
+            <div class="data-box-header">
+                <h3><i class="fas fa-tags"></i> Ofertas</h3>
+                <button class="btn btn-success" onclick="editOferta()"><i class="fas fa-plus"></i> Nueva</button>
+            </div>
+            <table>
+                <thead><tr><th>Nombre</th><th>Tipo</th><th>Valor</th><th>Inicio</th><th>Fin</th><th>Activa</th><th>Acciones</th></tr></thead>
+                <tbody>${data.map(o => `<tr>
+                    <td><strong>${o.nombre}</strong></td>
+                    <td>${formatCell(o.tipo, 'badge')}</td>
+                    <td>${o.valor}</td>
+                    <td>${o.fecha_inicio}</td>
+                    <td>${o.fecha_fin}</td>
+                    <td>${formatCell(o.activa, 'boolean')}</td>
+                    <td class="actions-cell">
+                        <button class="btn btn-info btn-sm" onclick="editOferta(${o.id})"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteOferta(${o.id})"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>`).join('')}</tbody>
+            </table>
+        </div>
+    `;
+}
+
+function editOferta(id = null) {
+    const o = id ? DB.get('ofertas').find(x => x.id === id) : { nombre: '', descripcion: '', tipo: 'Descuento', valor: 0, fecha_inicio: '', fecha_fin: '', activa: true };
+    openModal(id ? 'Editar Oferta' : 'Nueva Oferta', `
+        <div class="form-group"><label>Nombre</label><input id="f_nombre" value="${o.nombre}"></div>
+        <div class="form-group"><label>Descripción</label><textarea id="f_desc">${o.descripcion}</textarea></div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+            <div class="form-group"><label>Tipo</label><select id="f_tipo">${['Descuento','Bonus','Accesorio'].map(t => `<option ${o.tipo===t?'selected':''}>${t}</option>`).join('')}</select></div>
+            <div class="form-group"><label>Valor</label><input type="number" id="f_valor" value="${o.valor}"></div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+            <div class="form-group"><label>Inicio</label><input type="date" id="f_inicio" value="${o.fecha_inicio}"></div>
+            <div class="form-group"><label>Fin</label><input type="date" id="f_fin" value="${o.fecha_fin}"></div>
+        </div>
+        <div class="form-group"><label><input type="checkbox" id="f_activa" ${o.activa?'checked':''}> Activa</label></div>
+    `, `<button class="btn btn-primary" onclick="saveOferta(${id || 'null'})">Guardar</button>`);
+}
+
+function saveOferta(id) {
+    const data = DB.get('ofertas');
+    const obj = { id: id || DB.nextId('ofertas'), nombre: document.getElementById('f_nombre').value, descripcion: document.getElementById('f_desc').value, tipo: document.getElementById('f_tipo').value, valor: parseFloat(document.getElementById('f_valor').value), fecha_inicio: document.getElementById('f_inicio').value, fecha_fin: document.getElementById('f_fin').value, activa: document.getElementById('f_activa').checked };
+    if (id) { data[data.findIndex(x => x.id === id)] = obj; } else data.push(obj);
+    DB.set('ofertas', data);
+    closeModal(); renderOfertas(); showToast('Oferta guardada');
+}
+
+function deleteOferta(id) {
+    if (!confirm('¿Eliminar?')) return;
+    DB.set('ofertas', DB.get('ofertas').filter(x => x.id !== id));
+    renderOfertas();
+}
+
+function renderUsuarios() {
+    const data = DB.get('usuarios');
+    document.getElementById('contentArea').innerHTML = `
+        <div class="data-box">
+            <div class="data-box-header">
+                <h3><i class="fas fa-user-shield"></i> Usuarios</h3>
+                <button class="btn btn-success" onclick="editUsuario()"><i class="fas fa-plus"></i> Nuevo</button>
+            </div>
+            <table>
+                <thead><tr><th>Código</th><th>Nombre</th><th>Usuario</th><th>Email</th><th>Rol</th><th>Depto.</th><th>Acciones</th></tr></thead>
+                <tbody>${data.map(u => `<tr>
+                    <td>${u.codigo}</td>
+                    <td><strong>${u.nombre}</strong></td>
+                    <td>${u.username}</td>
+                    <td>${u.email}</td>
+                    <td>${formatCell(u.rol, 'badge')}</td>
+                    <td>${u.departamento}</td>
+                    <td class="actions-cell">
+                        <button class="btn btn-info btn-sm" onclick="editUsuario(${u.id})"><i class="fas fa-edit"></i></button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteUsuario(${u.id})"><i class="fas fa-trash"></i></button>
+                    </td>
+                </tr>`).join('')}</tbody>
+            </table>
+        </div>
+    `;
+}
+
+function editUsuario(id = null) {
+    const u = id ? DB.get('usuarios').find(x => x.id === id) : { nombre: '', username: '', email: '', password: '123456', rol: 'Vendedor', departamento: 'Ventas', codigo: 'U' + String(DB.nextId('usuarios')).padStart(3, '0') };
+    openModal(id ? 'Editar Usuario' : 'Nuevo Usuario', `
+        <div class="form-group"><label>Código</label><input id="f_codigo" value="${u.codigo}" ${id?'disabled':''}></div>
+        <div class="form-group"><label>Nombre</label><input id="f_nombre" value="${u.nombre}"></div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+            <div class="form-group"><label>Usuario</label><input id="f_username" value="${u.username}"></div>
+            <div class="form-group"><label>Contraseña</label><input id="f_password" value="${u.password}"></div>
+        </div>
+        <div class="form-group"><label>Email</label><input type="email" id="f_email" value="${u.email}"></div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+            <div class="form-group"><label>Rol</label><select id="f_rol">${['Administrador','Gerente','Vendedor','Mecánico'].map(r => `<option ${u.rol===r?'selected':''}>${r}</option>`).join('')}</select></div>
+            <div class="form-group"><label>Departamento</label><select id="f_depto">${['Ventas','Postventa','Sistemas','Finanzas','Legal'].map(d => `<option ${u.departamento===d?'selected':''}>${d}</option>`).join('')}</select></div>
+        </div>
+    `, `<button class="btn btn-primary" onclick="saveUsuario(${id || 'null'})">Guardar</button>`);
+}
+
+function saveUsuario(id) {
+    const data = DB.get('usuarios');
+    const obj = { id: id || DB.nextId('usuarios'), codigo: id ? data.find(x => x.id === id).codigo : document.getElementById('f_codigo').value, nombre: document.getElementById('f_nombre').value, username: document.getElementById('f_username').value, password: document.getElementById('f_password').value, email: document.getElementById('f_email').value, rol: document.getElementById('f_rol').value, departamento: document.getElementById('f_depto').value, fecha_registro: id ? data.find(x => x.id === id).fecha_registro : new Date().toISOString().split('T')[0] };
+    if (id) { data[data.findIndex(x => x.id === id)] = obj; } else data.push(obj);
+    DB.set('usuarios', data);
+    closeModal(); renderUsuarios(); showToast('Usuario guardado');
+}
+
+function deleteUsuario(id) {
+    if (id === currentUser.id) { showToast('No puedes eliminarte', 'error'); return; }
+    if (!confirm('¿Eliminar?')) return;
+    DB.set('usuarios', DB.get('usuarios').filter(x => x.id !== id));
+    renderUsuarios();
+}
+
+function renderAuditoria() {
+    const logs = DB.get('auditoria').slice().reverse();
+    document.getElementById('contentArea').innerHTML = `
+        <div class="data-box">
+            <div class="data-box-header">
+                <h3><i class="fas fa-clipboard-list"></i> Auditoría (${logs.length})</h3>
+                <button class="btn btn-warning btn-sm" onclick="if(confirm('¿Limpiar?')){DB.set('auditoria',[]);renderAuditoria();}"><i class="fas fa-trash"></i> Limpiar</button>
+            </div>
+            <table>
+                <thead><tr><th>#</th><th>Usuario</th><th>Fecha/Hora</th><th>Módulo</th><th>Acción</th><th>IP</th></tr></thead>
+                <tbody>${logs.map(l => `<tr>
+                    <td>${l.id}</td>
+                    <td><strong>${l.usuario}</strong></td>
+                    <td>${new Date(l.fecha_hora).toLocaleString()}</td>
+                    <td>${formatCell(l.modulo, 'badge')}</td>
+                    <td>${formatCell(l.accion, 'badge')}</td>
+                    <td>${l.ip}</td>
+                </tr>`).join('')}</tbody>
+            </table>
+        </div>
+    `;
+}
+
+function renderEventos() {
+    const eventos = DB.get('eventos').slice().reverse();
+    document.getElementById('contentArea').innerHTML = `
+        <div class="data-box" style="margin-bottom:20px;">
+            <div class="data-box-header">
+                <h3><i class="fas fa-bolt"></i> Motor de Eventos</h3>
+                <button class="btn btn-info" onclick="triggerEvent('Test.Evento', {mensaje:'Prueba manual'})"><i class="fas fa-play"></i> Probar</button>
+            </div>
+            <div style="padding:20px;">
+                <div class="event-log">
+                    ${eventos.length ? eventos.map(e => `
+                        <div class="event-item">
+                            <span class="timestamp">[${new Date(e.timestamp).toLocaleString()}]</span>
+                            <span class="event-type">${e.tipo}</span>
+                            <span style="color:#ce9178;">→ ${e.handlers.map(h => `${h.nombre}(${h.tiempo})`).join(', ')}</span>
+                            <span style="color:#4ec9b0;">[${e.estado}]</span>
+                        </div>
+                    `).join('') : '<div style="color:#666; text-align:center; padding:20px;">Sin eventos. Realiza acciones para ver los webhooks.</div>'}
+                </div>
+            </div>
+        </div>
+        <div class="data-box">
+            <div class="data-box-header"><h3><i class="fas fa-sitemap"></i> Flujo de Eventos</h3></div>
+            <div style="padding:20px; font-size:13px; line-height:1.8;">
+                <p><strong>🚗 Vehiculo.Ingresado:</strong> Decodificar VIN → Procesar Fotografía → Publicar en Web</p>
+                <p><strong>💼 Venta.Creada:</strong> Validar Stock → Notificar Gerente → Reservar Vehículo</p>
+                <p><strong>✅ Venta.Aprobada:</strong> Generar Contrato → Solicitar Crédito → Emitir Factura</p>
+                <p><strong>🔑 Venta.Entregada:</strong> Emitir Póliza → Programar Mantenimiento → Email Cliente</p>
+                <p><strong>🔧 Mantenimiento.Programado:</strong> Notificar Cliente → Asignar Mecánico → Reservar Repuestos</p>
+                <p><strong>📅 Cita.Agendada:</strong> Notificar Asesor → Reservar Vehículo → Email Confirmación</p>
+                <p><strong>✓ Cita.Confirmada:</strong> Notificar Cliente → Preparar Vehículo → Asignar Asesor</p>
+                <p><strong>🏁 Cita.Realizada:</strong> Enviar Encuesta → Crear Lead Seguimiento → Notificar Ventas</p>
+                <p><strong>✗ Cita.Cancelada:</strong> Liberar Vehículo → Notificar Asesor → Email Cancelación</p>
+            </div>
+        </div>
+    `;
+}
+
+// ============ INIT ============
+seedData();
+renderLandingInventory();
+populateTestDriveVehicles();
+renderCarousel();
+</script>
+</body>
+</html>
